@@ -1,0 +1,12 @@
+//Get Bangladesh shapefile
+
+var data = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017");
+print(data);
+
+
+var countryFilter = ee.Filter.inList('country_co', ['BG']);
+
+var filteredArea = data.filter(countryFilter);
+
+Map.addLayer(filteredArea);
+
