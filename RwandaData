@@ -21,3 +21,4 @@ var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .map(function(image){return image.clip(geometry)}) ;
 
 Map.addLayer(lights);
+print(lights);
