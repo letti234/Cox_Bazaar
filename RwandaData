@@ -22,3 +22,11 @@ var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
 
 Map.addLayer(lights);
 print(lights);
+
+Export.image.toDrive({
+  image: lights,
+  scale: 450,
+  description: 'RwandaVIIRS2020',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
