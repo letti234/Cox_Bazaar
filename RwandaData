@@ -16,9 +16,9 @@ var geometry =
 //Open VIIRS data, clip to Bangladesh
 
 var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
-                  .filter(ee.Filter.date('2020-01-01', '2020-12-31'))
-                  .filterBounds(geometry)
-                  .map(function(image){return image.clip(geometry)}) ;
+                  .filter(ee.Filter.date('2020-01-01', '2020-12-31')) 
+                  .map(function(image){return image.clip(geometry)});
+
 
 Map.addLayer(lights);
 print(lights);
