@@ -38,5 +38,6 @@ Export.image.toDrive({
   scale: 450,
   description: 'RwandaVIIRS2020',
   fileFormat: 'GEOTIFF',
-  folder: "Refugee camps and natural capital"
+  folder: "Refugee camps and natural capital",
+  maxPixels: 200000000
 });
