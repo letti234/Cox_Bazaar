@@ -17,7 +17,16 @@ var geometry =
 
 var lights15 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .filter(ee.Filter.date('2015-01-01', '2015-12-31')) 
-                  .map(function(image){return image.clip(geometry)});
+                  .map(function(image){return image.clip(geometry)})
+                  .reduce(ee.Reducer.mean());
+print(lights15);
 
 
-//Reduce image collection
+Export.image.toDrive({
+  image: lights15,
+  scale: 450,
+  description: 'RwandaVIIRS2015',
+  fileFormat: 'GEOTIFF',
+  folder: "Rwanda project"
+});
+
