@@ -98,3 +98,24 @@ Export.image.toDrive({
   maxPixels: 1000000000
 });
 
+
+
+//VIIRS 2019
+
+var lights19 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2019-01-01', '2019-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.mean());
+print(lights19);
+
+
+Export.image.toDrive({
+  image: lights19,
+  scale: 450,
+  description: 'RwandaVIIRS2018',
+  fileFormat: 'GEOTIFF',
+  folder: "Rwanda project",
+  maxPixels: 1000000000
+});
+
