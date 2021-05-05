@@ -41,7 +41,6 @@ var lights16 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
                   .reduce(ee.Reducer.mean());
-print(lights16);
 
 
 Export.image.toDrive({
@@ -65,7 +64,6 @@ var lights17 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
                   .reduce(ee.Reducer.mean());
-print(lights17);
 
 
 Export.image.toDrive({
@@ -86,8 +84,6 @@ var lights18 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
                   .reduce(ee.Reducer.mean());
-print(lights18);
-
 
 Export.image.toDrive({
   image: lights18,
@@ -107,13 +103,29 @@ var lights19 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
                   .reduce(ee.Reducer.mean());
-print(lights19);
-
 
 Export.image.toDrive({
   image: lights19,
   scale: 450,
-  description: 'RwandaVIIRS2018',
+  description: 'RwandaVIIRS2019',
+  fileFormat: 'GEOTIFF',
+  folder: "Rwanda project",
+  maxPixels: 1000000000
+});
+
+
+//VIIRS 2019
+
+var lights20 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2020-01-01', '2020-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.mean());
+
+Export.image.toDrive({
+  image: lights20,
+  scale: 450,
+  description: 'RwandaVIIRS2020',
   fileFormat: 'GEOTIFF',
   folder: "Rwanda project",
   maxPixels: 1000000000
