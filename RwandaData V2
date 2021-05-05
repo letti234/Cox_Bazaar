@@ -13,11 +13,12 @@ var geometry =
           [31.361693027572386, -0.586292567202803]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
-//Open VIIRS data, clip to Bangladesh
+//VIIRS 2015
 
 var lights15 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .filter(ee.Filter.date('2015-01-01', '2015-12-31')) 
                   .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
                   .reduce(ee.Reducer.mean());
 print(lights15);
 
@@ -27,6 +28,73 @@ Export.image.toDrive({
   scale: 450,
   description: 'RwandaVIIRS2015',
   fileFormat: 'GEOTIFF',
-  folder: "Rwanda project"
+  folder: "Rwanda project",
+  maxPixels: 1000000000
+});
+
+
+
+//VIIRS 2016
+
+var lights16 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2016-01-01', '2016-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.mean());
+print(lights16);
+
+
+Export.image.toDrive({
+  image: lights16,
+  scale: 450,
+  description: 'RwandaVIIRS2016',
+  fileFormat: 'GEOTIFF',
+  folder: "Rwanda project",
+  maxPixels: 1000000000
+});
+
+
+
+
+
+//VIIRS 2017
+
+
+var lights17 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2017-01-01', '2017-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.mean());
+print(lights17);
+
+
+Export.image.toDrive({
+  image: lights17,
+  scale: 450,
+  description: 'RwandaVIIRS2016',
+  fileFormat: 'GEOTIFF',
+  folder: "Rwanda project",
+  maxPixels: 1000000000
+});
+
+
+
+//VIIRS 2018
+
+var lights18 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2018-01-01', '2018-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.mean());
+print(lights18);
+
+
+Export.image.toDrive({
+  image: lights18,
+  scale: 450,
+  description: 'RwandaVIIRS2016',
+  fileFormat: 'GEOTIFF',
+  folder: "Rwanda project",
+  maxPixels: 1000000000
 });
 
