@@ -71,7 +71,7 @@ print(lights17);
 Export.image.toDrive({
   image: lights17,
   scale: 450,
-  description: 'RwandaVIIRS2016',
+  description: 'RwandaVIIRS2017',
   fileFormat: 'GEOTIFF',
   folder: "Rwanda project",
   maxPixels: 1000000000
@@ -92,7 +92,7 @@ print(lights18);
 Export.image.toDrive({
   image: lights18,
   scale: 450,
-  description: 'RwandaVIIRS2016',
+  description: 'RwandaVIIRS2018',
   fileFormat: 'GEOTIFF',
   folder: "Rwanda project",
   maxPixels: 1000000000
