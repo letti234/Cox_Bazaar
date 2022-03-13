@@ -1,0 +1,5 @@
+//Extracting LULC data for Cox's Bazar 2015-2019
+
+
+var CB = ee.FeatureCollection('users/salem043/CB_shapefile');
+Map.addLayer(CB);
