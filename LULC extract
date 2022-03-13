@@ -59,14 +59,6 @@ Map.addLayer(urban15, urbanViz, "Urban cover 2015");
 
 
 
-//Export.image.toDrive({
-//  image: forest15,
-// description: 'forest_2015',
- // fileFormat: 'GeoTIFF',
- // scale: 100,
- // file: "Cox Bazar deforestation study"
-//});
-
 
 
 
