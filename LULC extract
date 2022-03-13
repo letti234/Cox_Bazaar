@@ -59,6 +59,72 @@ Map.addLayer(urban15, urbanViz, "Urban cover 2015");
 
 
 
+Export.image.toDrive({
+image: forest15,
+description: 'pct_forest_2015',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: forest16,
+description: 'pct_forest_2016',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: forest17,
+description: 'pct_forest_2017',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: forest18,
+description: 'pct_forest_2018',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: forest19,
+description: 'pct_forest_2019',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+
+
+
+
+
+Export.image.toDrive({
+image: urban15,
+description: 'pct_urban_2015',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: urban16,
+description: 'pct_urban_2016',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: urban17,
+description: 'pct_urban_2017',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: urban18,
+description: 'pct_urban_2018',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+Export.image.toDrive({
+image: urban19,
+description: 'pct_urban_2019',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC"
+});
+
+
 
 
 
