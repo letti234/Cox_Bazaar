@@ -40,11 +40,11 @@ Map.addLayer(forest15, forestViz, "Forest cover 2015");
 
 var urban=lulc.select("urban-coverfraction");
 
-var urban15  = urban.filter(ee.Filter.date('2015-01-01', '2015-12-31')) ;
-var urban16  = urban.filter(ee.Filter.date('2016-01-01', '2016-12-31')) ;
-var urban17  = urban.filter(ee.Filter.date('2017-01-01', '2017-12-31')) ;
-var urban18  = urban.filter(ee.Filter.date('2018-01-01', '2018-12-31')) ;
-var urban19  = urban.filter(ee.Filter.date('2019-01-01', '2019-12-31')) ;
+var urban15  = urban.filter(ee.Filter.date('2015-01-01', '2015-12-31')).toBands() ;
+var urban16  = urban.filter(ee.Filter.date('2016-01-01', '2016-12-31')).toBands() ;
+var urban17  = urban.filter(ee.Filter.date('2017-01-01', '2017-12-31')).toBands() ;
+var urban18  = urban.filter(ee.Filter.date('2018-01-01', '2018-12-31')).toBands() ;
+var urban19  = urban.filter(ee.Filter.date('2019-01-01', '2019-12-31')).toBands() ;
 
 var urbanViz = {min: 0, max: 100, palette: ['FFFFFF', '800080']};
 Map.addLayer(urban15, urbanViz, "Urban cover 2015");
