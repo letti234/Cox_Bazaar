@@ -24,15 +24,14 @@ print("LULC raw", lulc);
 
 var forest=lulc.select("tree-coverfraction");
 
-var forest15  = forest.filter(ee.Filter.date('2015-01-01', '2015-12-31')) ;
-var forest16  = forest.filter(ee.Filter.date('2016-01-01', '2016-12-31')) ;
-var forest17  = forest.filter(ee.Filter.date('2017-01-01', '2017-12-31')) ;
-var forest18  = forest.filter(ee.Filter.date('2018-01-01', '2018-12-31')) ;
-var forest19  = forest.filter(ee.Filter.date('2019-01-01', '2019-12-31')) ;
+var forest15  = forest.filter(ee.Filter.date('2015-01-01', '2015-12-31')).toBands() ;
+var forest16  = forest.filter(ee.Filter.date('2016-01-01', '2016-12-31')).toBands() ;
+var forest17  = forest.filter(ee.Filter.date('2017-01-01', '2017-12-31')).toBands() ;
+var forest18  = forest.filter(ee.Filter.date('2018-01-01', '2018-12-31')).toBands() ;
+var forest19  = forest.filter(ee.Filter.date('2019-01-01', '2019-12-31')).toBands() ;
 
-
-var forest_2015 = forest15.toBands();
-print("Pct. forest 2015", forest_2015);
+//var forest_2015 = forest15.toBands();
+print("Pct. forest 2015", forest15);
 
 var forestViz = {min: 0, max: 100, palette: ['FFFFFF', '008000']};
 Map.addLayer(forest15, forestViz, "Forest cover 2015");
