@@ -1,7 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var geometry = 
     /* color: #00ffff */
-    /* shown: false */
     /* displayProperties: [
       {
         "type": "rectangle"
@@ -25,6 +24,6 @@ var lc2015 = ee.Image("COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019")
 .select('discrete_classification');
 var lc19 = lc2019.clip(geometry);
 
-
-
-
+Map.centerObject(geometry);
+Map.addLayer(lc19, {}, "2019 cover");
+Map.addLayer(lc15, {}, "2015 cover");
