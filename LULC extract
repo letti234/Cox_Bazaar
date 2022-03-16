@@ -16,10 +16,16 @@ var geometry =
 //ExtractingULC data for Cox's Bazar 2015-2019
 
 
-var lc19 = ee.Image("COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019")
+var lc2019 = ee.Image("COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019")
 .select('discrete_classification');
+var lc19 = lc2019.clip(geometry);
 
-Map.addLayer(lc19)
+var lc2018 = ee.Image("COPERNICUS/Landcover/100m/Proba-V-C3/Global/2018")
+.select('discrete_classification');
+var lc18 = lc2018.clip(geometry);
+
+var diff = lc19 - lc18;
+print(diff, "test");
 
 var lulc = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V-C3/Global")
                   .filterBounds(geometry)
@@ -27,7 +33,7 @@ var lulc = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V-C3/Global")
 
 print("LULC raw", lulc);
 
-print(lulc.size().getInfo());
+
 
 
 var forest=lulc.select("tree-coverfraction");
@@ -243,3 +249,4 @@ description: 'lulc_Pr_2019',
 fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
 maxPixels: 3124613250
 });
+
