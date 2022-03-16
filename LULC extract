@@ -65,13 +65,14 @@ Export.image.toDrive({
 image: forest15,
 description: 'pct_forest_2015',
 fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
 });
 
 Export.image.toDrive({
 image: forest16,
 description: 'pct_forest_2016',
 fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
-crs: 'EPSG:32646'
+crs: 'EPSG:32646',
 });
 
 Export.image.toDrive({
@@ -134,3 +135,101 @@ fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
 
 
 
+
+var lc=lulc.select("discrete_classification");
+
+var lc15  = lc.filter(ee.Filter.date('2015-01-01', '2015-12-31')).toBands() ;
+var lc16  = lc.filter(ee.Filter.date('2016-01-01', '2016-12-31')).toBands() ;
+var lc17  = lc.filter(ee.Filter.date('2017-01-01', '2017-12-31')).toBands() ;
+var lc18  = lc.filter(ee.Filter.date('2018-01-01', '2018-12-31')).toBands() ;
+var lc19  = lc.filter(ee.Filter.date('2019-01-01', '2019-12-31')).toBands() ;
+
+
+
+
+Export.image.toDrive({
+image: lc15,
+description: 'lulc_2015',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc16,
+description: 'lulc_2016',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc17,
+description: 'lulc_2017',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc18,
+description: 'lulc_2018',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc19,
+description: 'lulc_2019',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+
+
+
+
+
+
+var lcPr=lulc.select("discrete_classification-proba");
+
+var lcPr15  = lcPr.filter(ee.Filter.date('2015-01-01', '2015-12-31')).toBands() ;
+var lcPr16  = lcPr.filter(ee.Filter.date('2016-01-01', '2016-12-31')).toBands() ;
+var lcPr17  = lcPr.filter(ee.Filter.date('2017-01-01', '2017-12-31')).toBands() ;
+var lcPr18  = lcPr.filter(ee.Filter.date('2018-01-01', '2018-12-31')).toBands() ;
+var lcPr19  = lcPr.filter(ee.Filter.date('2019-01-01', '2019-12-31')).toBands() ;
+
+
+
+
+Export.image.toDrive({
+image: lc15,
+description: 'lulc_2015',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc16,
+description: 'lulc_2016',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc17,
+description: 'lulc_2017',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc18,
+description: 'lulc_2018',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
+
+Export.image.toDrive({
+image: lc19,
+description: 'lulc_2019',
+fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
+maxPixels: 3124613250
+});
