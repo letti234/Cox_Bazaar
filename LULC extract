@@ -1,6 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var geometry = 
     /* color: #00ffff */
+    /* shown: false */
     /* displayProperties: [
       {
         "type": "rectangle"
@@ -23,6 +24,9 @@ var lulc = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V-C3/Global")
                   .map(function(image){return image.clip(geometry)});
 
 print("LULC raw", lulc);
+
+print(lulc.size().getInfo());
+
 
 var forest=lulc.select("tree-coverfraction");
 
@@ -137,6 +141,7 @@ fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
 
 
 var lc=lulc.select("discrete_classification");
+print(lc);
 
 var lc15  = lc.filter(ee.Filter.date('2015-01-01', '2015-12-31')).toBands() ;
 var lc16  = lc.filter(ee.Filter.date('2016-01-01', '2016-12-31')).toBands() ;
@@ -145,7 +150,8 @@ var lc18  = lc.filter(ee.Filter.date('2018-01-01', '2018-12-31')).toBands() ;
 var lc19  = lc.filter(ee.Filter.date('2019-01-01', '2019-12-31')).toBands() ;
 
 
-
+print(lc15);
+print(lc16);
 
 Export.image.toDrive({
 image: lc15,
@@ -181,6 +187,8 @@ description: 'lulc_2019',
 fileFormat: 'GeoTIFF', scale: 100, folder: "Copernicus_LULC",
 maxPixels: 3124613250
 });
+
+var diff = lc19 - lc18;
 
 
 
