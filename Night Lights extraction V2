@@ -22,9 +22,13 @@ var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .filterBounds(geometry)
                   .map(function(image){return image.clip(geometry)}) ;
 
-print(lights);
 
 //Generate one monthly observation
-var light2014 = lights.select(['avg_rad'],['avg_rad'])
+var l_16_01 = lights.select(['avg_rad'],['avg_rad'])
 .filter(ee.Filter.date('2016-01-01', '2016-01-31'));
+
+
+
+
+//Export monthly observations as images
 
