@@ -24,37 +24,7 @@ var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
 
 print(lights);
 
-//Write loop that generates an image for each month 2016-2020
-
+//Generate one monthly observation
 var light2014 = lights.select(['avg_rad'],['avg_rad'])
-.filter(ee.Filter.date('2014-01-01', '2014-12-31'))
-.reduce(ee.Reducer.mean());
-
-//Exporting
-
-Export.image.toDrive({
-  image: light2014,
-  scale: 450,
-  description: 'light2014',
-  fileFormat: 'GEOTIFF',
-  folder: "Refugee camps and natural capital"
-});
-
-
-Export.image.toDrive({
-  image: light2017,
-  scale: 450,
-  description: 'light2017',
-  fileFormat: 'GEOTIFF',
-  folder: "Refugee camps and natural capital"
-});
-
-
-Export.image.toDrive({
-  image: light2020,
-  scale: 450,
-  description: 'light2020',
-  fileFormat: 'GEOTIFF',
-  folder: "Refugee camps and natural capital"
-});
+.filter(ee.Filter.date('2016-01-01', '2016-01-31'));
 
