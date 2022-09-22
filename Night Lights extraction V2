@@ -1,0 +1,60 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #98ff00 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[91.4374161982837, 22.117705225409342],
+          [91.4374161982837, 20.490318385517483],
+          [92.8216935420337, 20.490318385517483],
+          [92.8216935420337, 22.117705225409342]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//Get Bangladesh shapefile
+
+
+//Open VIIRS data, clip to Bangladesh
+
+var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2014-01-01', '2020-12-31'))
+                  .filterBounds(geometry)
+                  .map(function(image){return image.clip(geometry)}) ;
+
+print(lights);
+
+//Write loop that generates an image for each month 2016-2020
+
+var light2014 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2014-01-01', '2014-12-31'))
+.reduce(ee.Reducer.mean());
+
+//Exporting
+
+Export.image.toDrive({
+  image: light2014,
+  scale: 450,
+  description: 'light2014',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
+
+
+Export.image.toDrive({
+  image: light2017,
+  scale: 450,
+  description: 'light2017',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
+
+
+Export.image.toDrive({
+  image: light2020,
+  scale: 450,
+  description: 'light2020',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
+
