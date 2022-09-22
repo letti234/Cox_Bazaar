@@ -10,6 +10,8 @@ var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
                   .filterBounds(CB)
                   .map(function(image){return image.clip(CB)}) ;
 
+print(lights);
+
 var light2014 = lights.select(['avg_rad'],['avg_rad'])
 .filter(ee.Filter.date('2014-01-01', '2014-12-31'))
 .reduce(ee.Reducer.mean());
