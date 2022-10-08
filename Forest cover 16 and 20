@@ -1,0 +1,60 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[86.89043359863528, 27.041458182995743],
+          [86.89043359863528, 19.706667513634184],
+          [94.00957422363528, 19.706667513634184],
+          [94.00957422363528, 27.041458182995743]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var dta16 = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/FNF')
+                  .filterDate('2016-01-01', '2016-12-31')
+                  .filterBounds(geometry)
+                  .map(function(image){return image.clip(geometry)}) ;;
+
+var fnf16 = dta16.select('fnf');
+
+var forestNonForestVis = {
+  min: 1.0,
+  max: 3.0,
+  palette: ['006400', 'FEFF99', '0000FF'],
+};
+Map.setCenter(136.85, 37.37, 4);
+
+Map.addLayer(fnf16, forestNonForestVis, 'Forest/Non-Forest');
+
+var dta20 = ee.ImageCollection('JAXA/ALOS/PALSAR/YEARLY/FNF')
+                  .filterDate('2020-01-01', '2020-12-31')
+                  .filterBounds(geometry)
+                  .map(function(image){return image.clip(geometry)}) ;
+
+var fnf20 = dta20.select('fnf');
+
+print(fnf20);
+print(fnf16);
+
+var fnf20B = fnf20.toBands();
+var fnf16B = fnf16.toBands();
+
+Export.image.toDrive({
+  image: fnf16,
+  scale: 25,
+  description: 'Forested_2016',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
+
+Export.image.toDrive({
+  image: fnf20,
+  scale: 25,
+  description: 'Forested_2020',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
+
