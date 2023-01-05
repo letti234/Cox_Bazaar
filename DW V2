@@ -1,0 +1,28 @@
+//For one trainer tile
+
+//1. Subsetting data
+
+//Zoom in on camp area
+Map.setCenter(92.13834046148433,21.265672634170212, 9);
+
+//Select tile and time period
+var COL_FILTER = ee.Filter.and(
+    ee.Filter.bounds(ee.Geometry.Point(92.13834046148433,21.265672634170212)));
+    
+var dwCol = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1').filter(COL_FILTER);
+
+//Print all image names for this tile
+print("Images available for tile", dwCol.aggregate_array('system:index'));
+
+  //Weird, some labels have more than one year in them. And some dates 
+  //appear twice across images. Ergh.
+
+//2. Deriving a layer of monthly predicted land cover
+
+  //One month: Jan.
+
+//3. Deriving a layer of the probability of that land cover
+
+
+
+
