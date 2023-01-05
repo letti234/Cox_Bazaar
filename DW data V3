@@ -1,0 +1,150 @@
+//Zoom in on camp area
+Map.setCenter(92.13834046148433,21.265672634170212, 9);
+
+//Select tile and time period
+var COL_FILTER = ee.Filter.and(
+    ee.Filter.bounds(ee.Geometry.Point(92.13834046148433,21.265672634170212)),
+    ee.Filter.date('2021-04-01', '2021-04-30'));
+    
+//Filter data to get one month of data
+var dwCol = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1').filter(COL_FILTER);
+
+//Select a sample image
+var dwImage = ee.Image(dwCol.first());
+print(dwImage, "Image tile");
+
+//Within each sample image there are multiple layers, each reporting the probability
+//of a given land cover
+
+// Create a visualization that blends DW class label with probability.
+// Define list pairs of DW LULC label and color.
+var CLASS_NAMES = [
+    'water', 'trees', 'grass', 'flooded_vegetation', 'crops',
+    'shrub_and_scrub', 'built', 'bare', 'snow_and_ice'];
+
+var VIS_PALETTE = [
+    '419BDF', '397D49', '88B053', '7A87C6',
+    'E49635', 'DFC35A', 'C4281B', 'A59B8F',
+    'B39FE1'];
+
+// Create an RGB image of the label (most likely class) on [0, 1].
+var dwRgb = dwImage
+    .select('label')
+    .visualize({min: 0, max: 8, palette: VIS_PALETTE})
+    .divide(255);
+
+// Get the most likely class probability.
+var top1Prob = dwImage.select(CLASS_NAMES).reduce(ee.Reducer.max());
+print(top1Prob, "Highest Pr landcover");
+
+// Create a hillshade of the most likely class probability on [0, 1];
+var top1ProbHillshade =
+    ee.Terrain.hillshade(top1Prob.multiply(100))
+    .divide(255);
+
+// Combine the RGB image with the hillshade.
+var dwRgbHillshade = dwRgb.multiply(top1ProbHillshade);
+
+// Display the Dynamic World visualization with the source Sentinel-2 image.
+
+Map.addLayer(
+    dwRgbHillshade,
+    {min: 0, max: 0.65},
+    'Dynamic World');
+
+//Questions
+
+
+
+
+
+
+
+
+//How to transform into monthly data (based on the highest probability LC)
+//Select all tile data for January 2016
+var COL_FILTER_2 = ee.Filter.and(
+    ee.Filter.bounds(ee.Geometry.Point(92.13834046148433,21.265672634170212)),
+    ee.Filter.date('2016-01-01', '2016-01-31'));
+    
+var dwMonthly = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1').filter(COL_FILTER_2);
+print(dwMonthly, {}, "DW Jan 2016 images");
+
+
+var dwMonthlyAvg = dwMonthly.mean()
+print(dwMonthlyAvg, {}, "DW Jan 2016 average");
+
+var maxPrLC = dwMonthlyAvg.select(CLASS_NAMES).reduce(ee.Reducer.max());
+print(maxPrLC);
+Map.addLayer(maxPrLC, {}, "Max Pr land cover Jan 2016")
+
+var dwMonthlyLC =
+    ee.Terrain.hillshade(maxPrLC.multiply(100))
+    .divide(255);
+print(dwMonthlyLC);
+Map.addLayer(dwMonthlyLC, {}, "Terrain hillshade");
+
+var dwRgbHillshade2 = dwRgb.multiply(maxPrLC);
+
+// Display the Dynamic World visualization with the source Sentinel-2 image.
+
+Map.addLayer(
+    dwRgbHillshade2,
+    {min: 0, max: 0.65},
+    'Dynamic World 2');
+
+//3. Combine into monthly images
+
+//4. Export monthly images as separate rasters
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Copernicus tiles for study
+//var tiles = ['T46QCJ', 'T46QDJ', 'T46QDK', 'T46QCK'];
+
+//var tiles = ['T46QCJ'];
+
+//Use image ID to create a new variable with the tile ID for each tile
+//var dw = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1').map(function (img){
+  //  var tileId = ee.String(ee.Image(img).get('system:index')).split('_').get(2);
+  //  return img.set('tileId',tileId);
+//  });
+
+// filter on tile ids
+//var dwSoBGD = dw.filter(ee.Filter.inList('tileId',tiles));
+//print(dwSoBGD.limit(10));
+//Calculate monthly average probability of a given land cover for all available months
+
+
+//demoTime
+//var demo = dwSoBGD.filterDate('2021-10-15','2021-10-25');
+//print(demo);
+
+
+
+
+
+
+
+//Classification of colors for map
+//var july17M = july17.select('label');
+//var dwVisParams = {min: 0, max: 8, palette: ['#419BDF', '#397D49', '#88B053', 
+//'#7A87C6', '#E49635', '#DFC35A', '#C4281B', '#A59B8F', '#B39FE1'  ]};
+
+//Map.addLayer(july17M, dwVisParams, 'Classified Image');
+
+//Need to determine how to get full list of all data dates
+
+
+           
+           
