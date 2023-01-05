@@ -1,0 +1,32 @@
+//Copernicus tiles for study
+var tiles = ['T46QCJ', 'T46QDJ', 'T46QDK', 'T46QCK'];
+
+//Use image ID to create a new variable with the tile ID for each tile
+var dw = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1').map(function (img){
+    var tileId = ee.String(ee.Image(img).get('system:index')).split('_').get(2);
+    return img.set('tileId',tileId);
+  });
+
+// filter on tile ids
+var dwSoBGD = dw.filter(ee.Filter.inList('tileId',tiles));
+
+
+
+//July 2017 
+var july17 = dwSoBGD.filterDate('2017-06-01','2017-07-30');
+print(july17);
+
+//Classification of colors for map
+var july17M = july17.select('label');
+var dwVisParams = {min: 0, max: 8, palette: ['#419BDF', '#397D49', '#88B053', 
+'#7A87C6', '#E49635', '#DFC35A', '#C4281B', '#A59B8F', '#B39FE1'  ]};
+
+Map.addLayer(july17M, dwVisParams, 'Classified Image');
+
+Map.addLayer
+
+//Need to determine how to get full list of all data dates
+
+
+           
+           
