@@ -1,0 +1,95 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #98ff00 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[90.85741382937562, 23.87465724189269],
+          [90.85741382937562, 20.539059381965995],
+          [92.90087086062562, 20.539059381965995],
+          [92.90087086062562, 23.87465724189269]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+//VIIRS 2012
+
+var lights12 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2012-01-01', '2012-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights12);
+Map.addLayer(lights12);
+
+var lights13 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2013-01-01', '2013-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights13);
+
+
+var lights14 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2014-01-01', '2014-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights14);
+
+
+var lights15 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2015-01-01', '2015-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights15);
+
+
+var lights16 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2016-01-01', '2016-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights16);
+
+var lights17 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2017-01-01', '2017-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights17);
+Map.addLayer(lights12);
+
+var lights18 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2018-01-01', '2018-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights18);
+
+var lights19 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2019-01-01', '2019-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights19);
+
+var lights20 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2020-01-01', '2020-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+print(lights20);
+
+
+Export.image.toDrive({
+  image: lights12,
+  scale: 30,
+  description: 'VIIRS12',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 1000000000
+});
+
