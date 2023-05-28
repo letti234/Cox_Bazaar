@@ -1,0 +1,83 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[90.92124247476147, 23.351759895189605],
+          [90.92124247476147, 20.333730476978268],
+          [93.09653544351147, 20.333730476978268],
+          [93.09653544351147, 23.351759895189605]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//Get Bangladesh shapefile
+
+var CB = ee.FeatureCollection('users/salem043/SynthShapeV1');
+
+
+//Open VIIRS data, clip to study area
+
+var lights = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2012-01-01', '2020-12-31'))
+                  .map(function(image){return image.clip(geometry)}) ;
+
+print(lights);
+
+var lights12 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
+                  .filter(ee.Filter.date('2012-01-01', '2012-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("avg_rad")
+                  .reduce(ee.Reducer.max());
+
+print(lights12);
+
+var light2013 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2013-01-01', '2013-12-31'))
+.reduce(ee.Reducer.max());
+
+
+var light2014 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2014-01-01', '2014-12-31'))
+.reduce(ee.Reducer.max());
+
+var light2015 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2015-01-01', '2015-12-31'))
+.reduce(ee.Reducer.max());
+
+var light2016 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2016-01-01', '2016-12-31'))
+.reduce(ee.Reducer.max());
+
+var light2017 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2017-01-01', '2017-12-31'))
+.reduce(ee.Reducer.max());
+
+var light2018 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2018-01-01', '2018-12-31'))
+.reduce(ee.Reducer.max());
+
+var light2019 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2019-01-01', '2019-12-31'))
+.reduce(ee.Reducer.max());
+
+var light2020 = lights.select(['avg_rad'],['avg_rad'])
+.filter(ee.Filter.date('2020-01-01', '2020-12-31'))
+.reduce(ee.Reducer.max());
+
+
+Map.addLayer(light2012);
+print(light2013);
+
+//Exporting
+
+Export.image.toDrive({
+  image: light2012,
+  scale: 30,
+  description: 'light2012',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
+
+
