@@ -1950,5 +1950,13 @@ var trainImage = input.sampleRegions({
   scale: 30
 });
 
+//print(trainImage); //Landsat values for each training point, and training class
+
+//Accuracy assessment: use 80% for training and 20% for validation
+var trainingData = trainImage.randomColumn();
+var trainSet = trainingData.filter(ee.Filter.lessThan('random', 0.8));
+var testSet = trainingData.filter(ee.Filter.greaterThanorEquals('random', 0.8));
 
 
+//CART - classification and regression tree model
+var classifier = ee.Classifier.smileCart().train;
