@@ -1960,3 +1960,6 @@ var testSet = trainingData.filter(ee.Filter.greaterThanOrEquals('random', 0.8));
 
 //CART - classification and regression tree model
 var classifier = ee.Classifier.smileCart().train(trainSet, label, bands);
+
+//Classify the image - apply model to Landsat image
+var classified = input.classify(classifier);
