@@ -1959,4 +1959,4 @@ var testSet = trainingData.filter(ee.Filter.greaterThanorEquals('random', 0.8));
 
 
 //CART - classification and regression tree model
-var classifier = ee.Classifier.smileCart().train;
+var classifier = ee.Classifier.smileCart().train(trainSet, label, bands);
