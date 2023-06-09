@@ -1945,8 +1945,10 @@ var training = Settlement.merge(Crop).merge(Water).merge(Forest).merge(Bare).mer
 
 //Overlay the points on the Landsat image
 var trainImage = input.sampleRegions({
-    
-})
+  collection: training,
+  properties: [label],
+  scale: 30
+});
 
 
 
