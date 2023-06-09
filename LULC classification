@@ -1,0 +1,21 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var l8raw = ee.ImageCollection("LANDSAT/LC08/C02/T1");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Supervised classification of LULC in BGD 
+
+//BGD shapefile
+var countries = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017");
+var BGD = countries.filter(ee.Filter.eq('country_na', 'Bangladesh'));
+
+Map.addLayer(BGD, {}, "Bangladesh", false);
+Map.centerObject(BGD, 6);
+
+///Landsat 8 - cloudfree composite of 2020
+
+
+//Existing algorithm that removes cloud contamination from image
+var image = ee.Algorithms.Landsat.simpleComposite({
+  collection: l8raw.filterDate('2020-01-01', '2020-12-31'),
+  asFloat: true
+});
+
