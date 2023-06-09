@@ -1955,7 +1955,7 @@ var trainImage = input.sampleRegions({
 //Accuracy assessment: use 80% for training and 20% for validation
 var trainingData = trainImage.randomColumn();
 var trainSet = trainingData.filter(ee.Filter.lessThan('random', 0.8));
-var testSet = trainingData.filter(ee.Filter.greaterThanorEquals('random', 0.8));
+var testSet = trainingData.filter(ee.Filter.greaterThanOrEquals('random', 0.8));
 
 
 //CART - classification and regression tree model
