@@ -12,10 +12,21 @@ Map.centerObject(BGD, 6);
 
 ///Landsat 8 - cloudfree composite of 2020
 
-
 //Existing algorithm that removes cloud contamination from image
 var image = ee.Algorithms.Landsat.simpleComposite({
   collection: l8raw.filterDate('2020-01-01', '2020-12-31'),
   asFloat: true
 });
+
+var trueColorVis = {min: 0, max: 0.3, bands: ['B4', "B3", "B2"]};
+Map.addLayer(image.clip(BGD), trueColorVis, 'Composite');
+
+
+//Generate training data
+var label = "Class";
+var bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B7']; ///Can use different bands
+
+
+
+
 
