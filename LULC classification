@@ -1,6 +1,9 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var l8raw = ee.ImageCollection("LANDSAT/LC08/C02/T1"),
-    Water = /* color: #0b4a8b */ee.FeatureCollection(
+    Water = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    ee.FeatureCollection(
         [ee.Feature(
             ee.Geometry.Point([92.31489996989606, 20.794463390262845]),
             {
@@ -163,7 +166,10 @@ var l8raw = ee.ImageCollection("LANDSAT/LC08/C02/T1"),
               "Class": 0,
               "system:index": "26"
             })]),
-    Settlement = /* color: #ff15f6 */ee.FeatureCollection(
+    Settlement = 
+    /* color: #ff15f6 */
+    /* shown: false */
+    ee.FeatureCollection(
         [ee.Feature(
             ee.Geometry.Point([92.31561860968665, 20.79537624199369]),
             {
@@ -524,7 +530,10 @@ var l8raw = ee.ImageCollection("LANDSAT/LC08/C02/T1"),
               "Class": 1,
               "system:index": "59"
             })]),
-    Forest = /* color: #32772c */ee.FeatureCollection(
+    Forest = 
+    /* color: #32772c */
+    /* shown: false */
+    ee.FeatureCollection(
         [ee.Feature(
             ee.Geometry.Point([92.32864612683525, 20.771885471162044]),
             {
@@ -945,7 +954,10 @@ var l8raw = ee.ImageCollection("LANDSAT/LC08/C02/T1"),
               "Class": 2,
               "system:index": "69"
             })]),
-    Crop = /* color: #c28815 */ee.FeatureCollection(
+    Crop = 
+    /* color: #c28815 */
+    /* shown: false */
+    ee.FeatureCollection(
         [ee.Feature(
             ee.Geometry.Point([92.31494540757288, 20.793943346232346]),
             {
@@ -1264,7 +1276,10 @@ var l8raw = ee.ImageCollection("LANDSAT/LC08/C02/T1"),
               "Class": 3,
               "system:index": "52"
             })]),
-    Bare = /* color: #fffe92 */ee.FeatureCollection(
+    Bare = 
+    /* color: #fffe92 */
+    /* shown: false */
+    ee.FeatureCollection(
         [ee.Feature(
             ee.Geometry.Point([92.30665639507382, 20.78487166827571]),
             {
@@ -1457,7 +1472,10 @@ var l8raw = ee.ImageCollection("LANDSAT/LC08/C02/T1"),
               "Class": 4,
               "system:index": "31"
             })]),
-    Aqua = /* color: #27edff */ee.FeatureCollection(
+    Aqua = 
+    /* color: #27edff */
+    /* shown: false */
+    ee.FeatureCollection(
         [ee.Feature(
             ee.Geometry.Point([92.32226533155331, 20.784023820402652]),
             {
@@ -1963,3 +1981,16 @@ var classifier = ee.Classifier.smileCart().train(trainSet, label, bands);
 
 //Classify the image - apply model to Landsat image
 var classified = input.classify(classifier);
+
+
+//define visualization
+var landCoverPalette = [
+    'blue',
+    'red',
+    'green',
+    'yellow',
+    'grey',
+    'orange'
+];
+
+Map.addLayer(classified.clip(BGD), {palette:landCoverPalette, min:0, max:5}, "LULC")
