@@ -1,0 +1,32 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[90.88579719194043, 24.268894490735867],
+          [90.88579719194043, 19.87201703161415],
+          [93.28081672319041, 19.87201703161415],
+          [93.28081672319041, 24.268894490735867]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+
+var dataset = ee.ImageCollection('MODIS/006/MOD44B').
+map(function(image){return image.clip(geometry)});
+
+print(dataset);
+
+var visualization = {
+  bands: ['Percent_Tree_Cover'],
+  min: 0,
+  max: 100,
+  palette: ['bbe029', '0a9501', '074b03']
+};
+
+Map.setCenter(6.746, 46.529, 3);
+
+Map.addLayer(dataset, visualization, 'Percent Tree Cover');
