@@ -1,0 +1,23 @@
+//Writing the entire fucking thing from scratch fuck my fucking life
+
+// PRODUCE SAMPLE GRIDS
+////////////////////////////////////////////////////////
+
+  //Call on study area
+  var area = ee.FeatureCollection('users/salem043/ROI_V2_2023');
+  Map.addLayer(area, {}, "Study area");
+
+  print(area);
+
+  // Specify grid size in projection, x and y units (based on projection).
+  var projection='EPSG:4326'; // WGS84 lat lon
+  var dx=0.01;
+  var dy=0.01;
+
+  // Make grid and visualize.
+  var proj=ee.Projection(projection).scale(dx, dy);
+  var grid=area.geometry().coveringGrid(proj);
+
+  Map.addLayer(grid,{}, 'grid');
+
+/
