@@ -20,8 +20,9 @@ map(function(image){return image.clip(geometry)});
 
 print(dataset);
 
-var tree16 = ee.ImageCollection('MODIS/006/MOD44B')
-                  .filter(ee.Filter.date('2016-01-01', '2016-12-31')) 
+//Inspect data
+var tree00 = ee.ImageCollection('MODIS/006/MOD44B')
+                  .filter(ee.Filter.date('2000-01-01', '2000-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("Percent_Tree_Cover");
 
@@ -30,6 +31,9 @@ var tree18 = ee.ImageCollection('MODIS/006/MOD44B')
                   .map(function(image){return image.clip(geometry)})
                   .select("Percent_Tree_Cover");
 
+var tr18 = tree18.toBands();
+
+print(tr18);
 
 var visualization = {
   bands: ['Percent_Tree_Cover'],
@@ -38,15 +42,17 @@ var visualization = {
   palette: ['bbe029', '0a9501', '074b03']
 };
 
-Map.addLayer(tree16, visualization, 'Percent Tree Cover 16');
+Map.addLayer(tree00, visualization, 'Percent Tree Cover 00');
 Map.addLayer(tree18, visualization, 'Percent Tree Cover 18');
 
-
+print(tree16, "Modis 2016");
 
 var batch = require('users/fitoprincipe/geetools:batch');
 
+print('Projection, crs, and crs_transform:', tr18.projection());
 
 
 batch.Download.ImageCollection.toDrive(dataset, 'MODIS_treecover', 
                 {scale: 250, 
+                crs: projection,
                 });
