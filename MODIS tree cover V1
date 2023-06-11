@@ -20,6 +20,17 @@ map(function(image){return image.clip(geometry)});
 
 print(dataset);
 
+var tree16 = ee.ImageCollection('MODIS/006/MOD44B')
+                  .filter(ee.Filter.date('2016-01-01', '2016-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("Percent_Tree_Cover");
+
+var tree18 = ee.ImageCollection('MODIS/006/MOD44B')
+                  .filter(ee.Filter.date('2018-01-01', '2018-12-31')) 
+                  .map(function(image){return image.clip(geometry)})
+                  .select("Percent_Tree_Cover");
+
+
 var visualization = {
   bands: ['Percent_Tree_Cover'],
   min: 0,
@@ -27,6 +38,15 @@ var visualization = {
   palette: ['bbe029', '0a9501', '074b03']
 };
 
-Map.setCenter(6.746, 46.529, 3);
+Map.addLayer(tree16, visualization, 'Percent Tree Cover 16');
+Map.addLayer(tree18, visualization, 'Percent Tree Cover 18');
 
-Map.addLayer(dataset, visualization, 'Percent Tree Cover');
+
+
+var batch = require('users/fitoprincipe/geetools:batch');
+
+
+
+batch.Download.ImageCollection.toDrive(dataset, 'MODIS_treecover', 
+                {scale: 250, 
+                });
