@@ -108,6 +108,21 @@ var grid = grid.map(function(feature) {
 });
 
 
+//2006
+var tree = ee.ImageCollection('MODIS/006/MOD44B')
+                  .filter(ee.Filter.date('2006-01-01', '2006-12-31')) 
+                  .map(function(image){return image.clip(area)})
+                  .select("Percent_Tree_Cover").toBands();
+
+var grid = grid.map(function(feature) {
+  return feature.set(tree.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+  }));
+});
+
+
+
 
 
 
