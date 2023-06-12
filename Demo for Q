@@ -12,41 +12,25 @@ var dy=0.1;
 var proj=ee.Projection(projection).scale(dx, dy);
 var grid=BGD.geometry().coveringGrid(proj);
 
-Map.addLayer(grid);
+Map.addLayer(grid.limit(10));
 
-//Find centroid of tiles
-var getCentroids = function(feature) {
-  return feature.set({centralPoint: feature.centroid(0.1)});
-};
 
-var tileCenter = grid.map(getCentroids);
 
-var tileCentroids = tileCenter.map(function(f) {
-  var centroid = ee.Feature(ee.List(f.get('centralPoint')));
-  return centroid;
-});
-Map.addLayer(tileCentroids);
+///MODIS tree cover data
+var data = ee.ImageCollection('MODIS/006/MOD44B');
+//print(data, "MODIS");
+var name = "Percent_Tree_Cover"
 
-///Protected areas data
+//2000
+var tree = data.filter(ee.Filter.date('2000-01-01', '2000-12-31'))
+.map(function(image){return image.clip(BGD)}).select(name).toBands();
 
-var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
-///.filterBounds(area);
+var tree = tree.rename("PctFor00");
 
-var properties = ["NAME"];
-
-var spatialFilter = ee.Filter.intersects({
-  leftField: '.geo',
-  rightField: '.geo'
+var grid = grid.map(function(feature) {
+  return feature.set(tree.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+  }));
 });
 
-
-var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, parks, spatialFilter);
-
-var tileCentroids2 = joinAll.map(function(feature){
-  var joinedFeat =  ee.List(feature.get('matched'));
-  var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
-  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
-});
-
-print(tileCentroids.limit(10), "Original tile centroids");
-print(tileCentroids2.limit(10), "Tile centroids after join");
+print(grid.limit(10));
