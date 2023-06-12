@@ -18,7 +18,7 @@
 //
 ///////////////////////////////////////////////////////////////////////
 
-var tiles = tile(area, 0.0045045045); /// 500m gridcells
+var tiles = tile(area, 0.01); /// 1.1 km gridcells; 500m gridcells = 0.0045045045
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
@@ -68,6 +68,9 @@ function tile(region, size_in_degrees) {
 }
 
   var grid = tiles
+  
+  var grid = grid.select(["system:index"], ["ID"]);
+
   
   Map.centerObject
   Map.addLayer(grid.limit(100), {col: "red"}, "Sample tile");
@@ -1648,7 +1651,7 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-print(grid.limit(10));
+print(grid.limit(10), "Please freaking work");
 
 
 ////////////////////////////////////////////////////
