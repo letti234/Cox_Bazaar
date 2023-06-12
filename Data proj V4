@@ -1362,6 +1362,16 @@ var grid = grid.map(function(feature) {
   }));
 });
 
+//2015 GOOD
+var WSF15 = ee.Image('DLR/WSF/WSF2015/v1')
+
+var WSF15 = WSF15.where(WSF15.eq(0), 0)
+.where(WSF15.eq(255), 1).clip(area).clip(area).rename("WSF15_g");
+
+
+Map.addLayer(WSF15, {}, 'WSF 2015 good');
+
+
 //2019
 var WSF19 = ee.Image("users/salem043/WSF19clean")
 .select("b1").rename("set_2019");
@@ -1378,11 +1388,5 @@ var grid = grid.map(function(feature) {
 });
 
 
-///Camp Measurements - distance to camp, intersects camp
-///////////////////////////////////////////////////////
-
-var centroid = grid.geometry().centroid()
-print(centroid);
 var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
-///Map.addLayer(camps);
-
+Map.addLayer(camps, {col: "red"}, "Camps")
