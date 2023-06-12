@@ -3,8 +3,7 @@
 //Still to do
     //Choose resolution
     //Deal with water in tiles
-    //Use renames to make variable names not hellish as you go
-    
+
 // PRODUCE SAMPLE GRIDS
 ////////////////////////////////////////////////////////
 
@@ -1604,5 +1603,17 @@ var grid = grid.map(function(feature) {
 });
 
 print(grid.limit(10));
+
+////////////////////////////////////////////////////
+//
+// Percent in protected area
+//
+//////////////////////////////////////////////////
+var protect = ee.FeatureCollection("WCMC/WDPA/current/polygons");
+Map.addLayer(protect);
+
+
+var pct = grid.intersection(protect);
+
 var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
 Map.addLayer(camps, {col: "red"}, "Camps")
