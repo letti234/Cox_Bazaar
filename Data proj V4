@@ -1381,43 +1381,8 @@ var grid = grid.map(function(feature) {
 ///Camp Measurements - distance to camp, intersects camp
 ///////////////////////////////////////////////////////
 
-
+var centroid = grid.geometry().centroid()
+print(centroid);
 var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
 ///Map.addLayer(camps);
 
-
-// Max search distance is 5 km.
-var spatialFilter = ee.Filter.withinDistance({
-  distance: 20000,
-  leftField: '.geo',
-  rightField: '.geo',
-  maxError: 10
-})
-
-// Join the points to themselves.
-var joined = ee.Join.saveAll({
-  matchesKey: 'neighbors', 
-  measureKey: 'distance',
-  ordering: 'distance'
-}).apply({
-  primary: grid, 
-  secondary: camps, 
-  condition: spatialFilter
-});
-
-// Get rid of points w/o neighbors.
-// Increase distance in the spatialFilter if
-// you want them all to have neighbors.
-var hasNearest = joined.map(function(f) {
-  var neighsSize = ee.List(f.get('neighbors')).size();
-  return f.set('neighsSize', neighsSize);
-}).filter(ee.Filter.gt('neighsSize', 1));
-
-// Get distance to nearest point.
-var withNearestDist = hasNearest.map(function(f) {
-  var nearestDist = ee.Feature(ee.List(f.get('neighbors')).get(1))
-      .get('distance');
-  return f.set('nearestDist', nearestDist);
-});
-
-print(withNearestDist.limit(5));
