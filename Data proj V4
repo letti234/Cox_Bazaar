@@ -1388,7 +1388,7 @@ var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
 
 // Max search distance is 5 km.
 var spatialFilter = ee.Filter.withinDistance({
-  distance: 5000,
+  distance: 20000,
   leftField: '.geo',
   rightField: '.geo',
   maxError: 10
@@ -1412,7 +1412,6 @@ var hasNearest = joined.map(function(f) {
   var neighsSize = ee.List(f.get('neighbors')).size();
   return f.set('neighsSize', neighsSize);
 }).filter(ee.Filter.gt('neighsSize', 1));
-Map.addLayer(hasNearest.limit(10), {color: 'red'}, 'hasNearest');
 
 // Get distance to nearest point.
 var withNearestDist = hasNearest.map(function(f) {
@@ -1421,4 +1420,4 @@ var withNearestDist = hasNearest.map(function(f) {
   return f.set('nearestDist', nearestDist);
 });
 
-//Map.addLayer(withNearestDist, {color: 'blue'}, 'withNearestDist');
+print(withNearestDist.limit(5));
