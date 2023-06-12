@@ -1123,7 +1123,7 @@ var grid = grid.map(function(feature){
 
 })
 
-print(grid.limit(10), "DID THIS WORK");
+print(grid.limit(10), "GEE with most of Hansen");
 
 
 
