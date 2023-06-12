@@ -9,9 +9,9 @@
 
   //Call on study area
   var area = ee.FeatureCollection('users/salem043/ROI_V2_2023');
-  Map.addLayer(area, {}, "Study area");
+  //Map.addLayer(area, {}, "Study area");
 
-  print(area);
+  //print(area);
 
   // Specify grid size in projection, x and y units (based on projection).
   var projection='EPSG:4326'; // WGS84 lat lon
@@ -23,7 +23,7 @@
   var grid=area.geometry().coveringGrid(proj);
 
   
-  print(grid.limit(10), "Original grid");
+//print(grid.limit(10), "Original grid");
   
   
 //////////////////////////////////////////////////////////  
@@ -33,7 +33,7 @@
 //////////////////////////////////////////////////////////
 
 var data = ee.ImageCollection('MODIS/006/MOD44B');
-print(data, "MODIS");
+//print(data, "MODIS");
 var name = "Percent_Tree_Cover"
 
 //2000
@@ -440,7 +440,7 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-print(grid.limit(10),"Grid with first two MODIS");
+//print(grid.limit(10),"Grid with first two MODIS");
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -648,7 +648,7 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-print(grid.limit(10),"Grid with first three MODIS");
+//print(grid.limit(10),"Grid with first three MODIS");
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -855,7 +855,7 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-print(grid.limit(10),"Grid with first four MODIS");
+//print(grid.limit(10),"Grid with first four MODIS");
 
 ////////////////////////////////////////////////////////
 //
@@ -1062,7 +1062,7 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-print(grid.limit(10),"Grid with first four MODIS");
+//print(grid.limit(10),"Grid with first four MODIS");
 
 
 //////////////////////////////////////////////////////
@@ -1126,7 +1126,7 @@ var grid = grid.map(function(feature){
 
 })
 
-print(grid.limit(10), "GEE with most of Hansen");
+//print(grid.limit(10), "GEE with most of Hansen");
 
 ////////////////////////////////////////////////////////
 //
@@ -1150,7 +1150,7 @@ var grid = grid.map(function(feature) {
 ////////////////////////////////////////////////////////
 
 var WSF85_15 = ee.Image("users/salem043/WSF_85_15");
-print(WSF85_15)
+//print(WSF85_15)
 
 //2000
 var WSF = ee.Image(1).select("constant").rename("set_2000")
@@ -1381,13 +1381,44 @@ var grid = grid.map(function(feature) {
 ///Camp Measurements - distance to camp, intersects camp
 ///////////////////////////////////////////////////////
 
+
 var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
+///Map.addLayer(camps);
 
-Map.addLayer(camps);
 
+// Max search distance is 5 km.
+var spatialFilter = ee.Filter.withinDistance({
+  distance: 5000,
+  leftField: '.geo',
+  rightField: '.geo',
+  maxError: 10
+})
 
-  
-  
-  
-//Remove tiles that intersect camps
-  
+// Join the points to themselves.
+var joined = ee.Join.saveAll({
+  matchesKey: 'neighbors', 
+  measureKey: 'distance',
+  ordering: 'distance'
+}).apply({
+  primary: grid, 
+  secondary: camps, 
+  condition: spatialFilter
+});
+
+// Get rid of points w/o neighbors.
+// Increase distance in the spatialFilter if
+// you want them all to have neighbors.
+var hasNearest = joined.map(function(f) {
+  var neighsSize = ee.List(f.get('neighbors')).size();
+  return f.set('neighsSize', neighsSize);
+}).filter(ee.Filter.gt('neighsSize', 1));
+Map.addLayer(hasNearest.limit(10), {color: 'red'}, 'hasNearest');
+
+// Get distance to nearest point.
+var withNearestDist = hasNearest.map(function(f) {
+  var nearestDist = ee.Feature(ee.List(f.get('neighbors')).get(1))
+      .get('distance');
+  return f.set('nearestDist', nearestDist);
+});
+
+//Map.addLayer(withNearestDist, {color: 'blue'}, 'withNearestDist');
