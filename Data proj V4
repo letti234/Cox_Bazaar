@@ -13,7 +13,7 @@
 
   //print(area);
 
-  // Specify grid size in projection, x and y units (based on projection).
+  // Specify grid size in projection: 500m.
   var projection='EPSG:4326'; // WGS84 lat lon
   var dx=0.0045045045;
   var dy=0.0045045045;
@@ -1633,6 +1633,7 @@ print(tileCentroids.limit(3), 'centroids');
 //
 //////////////////////////////////////////////////
 
+Export.table.toDrive(grid, "CB_Export_V1", "CB_Exports");
 
 
 
