@@ -15,14 +15,14 @@
 
   // Specify grid size in projection, x and y units (based on projection).
   var projection='EPSG:4326'; // WGS84 lat lon
-  var dx=0.00225225225;
-  var dy=0.00225225225;
+  var dx=0.0045045045;
+  var dy=0.0045045045;
 
   // Make grid and visualize.
   var proj=ee.Projection(projection).scale(dx, dy);
   var grid=area.geometry().coveringGrid(proj);
 
-  
+  Map.addLayer(grid);
 //print(grid.limit(10), "Original grid");
   
   
