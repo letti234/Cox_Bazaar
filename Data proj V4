@@ -1632,6 +1632,7 @@ print(tileCentroids.limit(3), 'centroids');
 // Protected area
 //
 //////////////////////////////////////////////////
+
 var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 .filterBounds(area);
 
