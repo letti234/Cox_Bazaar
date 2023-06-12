@@ -1069,16 +1069,15 @@ print(grid.limit(10),"Grid with first four MODIS");
 
 var Hansen = ee.Image("UMD/hansen/global_forest_change_2022_v1_10").clip(area);
 var lossYr = Hansen.select("lossyear")
-var cover00 = Hansen.select("treecover2000")
+var cover00 = Hansen.select("treecover2000").rename("npix_gee")
 
 var grid = grid.map(function(feature) {
   return feature.set(cover00.reduceRegion({
     reducer: 'count',
-    geometry: feature.geometry(),
+    geometry: feature.geometry()
   }));
 });
 
-print(grid.limit(10), "Grid, Modis Hansen");
 
 
 //////////////////////////////////////////////////////
@@ -1125,8 +1124,94 @@ var grid = grid.map(function(feature){
 
 print(grid.limit(10), "GEE with most of Hansen");
 
+////////////////////////////////////////////////////////
+//
+//World Settlement Footprint - mean settlement by year
+//
+////////////////////////////////////////////////////////
 
+var WSF85_15 = ee.Image("users/salem043/WSF_85_15");
+print(WSF85_15)
 
+//2000
+var WSF = ee.Image(1).select("constant").rename("set_2000")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2000)), 1)
+      .where(WSF85_15.gt(2000), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2001
+var WSF = ee.Image(1).select("constant").rename("set_2001")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2001)), 1)
+      .where(WSF85_15.gt(2001), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2002
+var WSF = ee.Image(1).select("constant").rename("set_2002")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2002)), 1)
+      .where(WSF85_15.gt(2002), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2003
+var WSF = ee.Image(1).select("constant").rename("set_2003")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2003)), 1)
+      .where(WSF85_15.gt(2003), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2004
+var WSF = ee.Image(1).select("constant").rename("set_2004")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2004)), 1)
+      .where(WSF85_15.gt(2004), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2005
+var WSF = ee.Image(1).select("constant").rename("set_2005")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2005)), 1)
+      .where(WSF85_15.gt(2005), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+print(grid.limit(15), "Working?");
 
 ///Camp Measurements - distance to camp, intersects camp
 ///////////////////////////////////////////////////////
