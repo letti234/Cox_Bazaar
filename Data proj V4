@@ -1638,27 +1638,23 @@ var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 Map.addLayer(parks);
 print(parks);
 
+var properties = ["NAME"];
 
-var properties = ["DESIG_ENG","MANAG_AUTH", "NAME"];
-
-// Define a spatial filter as geometries that intersect.
 var spatialFilter = ee.Filter.intersects({
   leftField: '.geo',
   rightField: '.geo'
 });
 
-// Join the points and polygons and apply the spatial filter to keep only intersecting ones
+
 var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, parks, spatialFilter);
 
-// Since the join adds intersecting polygons to a new property 'matched'
-// we need to extract required info from the polygons and copy it to the points
-var ecosample = joinAll.map(function(feature){
+var SSAdata = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
   return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
 
-print('sample extract', ecosample.limit(1));
+print(SSAdata.limit(5), "SSA ADM of centroid");
 
 
 ////////////////////////////////////////////////////
