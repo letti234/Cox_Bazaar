@@ -1,0 +1,52 @@
+///Sample tiles
+
+var BGD = ee.FeatureCollection("FAO/GAUL/2015/level0")
+.filter(ee.Filter.eq("ADM0_NAME", "Bangladesh"));
+
+// Specify grid size in projection, x and y units (based on projection).
+var projection='EPSG:4326'; // WGS84 lat lon
+var dx=0.1;
+var dy=0.1;
+
+// Make grid and visualize.
+var proj=ee.Projection(projection).scale(dx, dy);
+var grid=BGD.geometry().coveringGrid(proj);
+
+Map.addLayer(grid);
+
+//Find centroid of tiles
+var getCentroids = function(feature) {
+  return feature.set({centralPoint: feature.centroid(0.1)});
+};
+
+var tileCenter = grid.map(getCentroids);
+
+var tileCentroids = tileCenter.map(function(f) {
+  var centroid = ee.Feature(ee.List(f.get('centralPoint')));
+  return centroid;
+});
+Map.addLayer(tileCentroids);
+
+///Protected areas data
+
+var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
+///.filterBounds(area);
+
+var properties = ["NAME"];
+
+var spatialFilter = ee.Filter.intersects({
+  leftField: '.geo',
+  rightField: '.geo'
+});
+
+
+var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, parks, spatialFilter);
+
+var tileCentroids2 = joinAll.map(function(feature){
+  var joinedFeat =  ee.List(feature.get('matched'));
+  var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
+  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
+});
+
+print(tileCentroids.limit(10), "Original tile centroids");
+print(tileCentroids2.limit(10), "Tile centroids after join");
