@@ -1061,6 +1061,15 @@ var grid = grid.map(function(feature) {
 print(grid.limit(10),"Grid with first four MODIS");
 
 
+//////////////////////////////////////////////////////
+//
+// Hansen pct forest loss by year 2001-2020
+//
+///////////////////////////////////////////////////////
+
+var Hansen = ee.Image("UMD/hansen/global_forest_change_2022_v1_10").clip(area);
+
+
 
 ///Camp Measurements - distance to camp, intersects camp
 ///////////////////////////////////////////////////////
