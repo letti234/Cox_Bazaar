@@ -1612,8 +1612,10 @@ print(grid.limit(10));
 var protect = ee.FeatureCollection("WCMC/WDPA/current/polygons");
 Map.addLayer(protect);
 
-
-var pct = grid.intersection(protect);
-
+////////////////////////////////////////////////////
+//
+// Minimum distance to camps
+//
+//////////////////////////////////////////////////
 var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
 Map.addLayer(camps, {col: "red"}, "Camps")
