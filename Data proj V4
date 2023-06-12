@@ -1643,31 +1643,8 @@ print(tileCentroids.limit(3), 'centroids');
 //
 //////////////////////////////////////////////////
 
-
-
 var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 .filterBounds(area);
-
-Map.addLayer(parks);
-print(parks);
-
-var properties = ["NAME"];
-
-var spatialFilter = ee.Filter.intersects({
-  leftField: '.geo',
-  rightField: '.geo'
-});
-
-
-var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, parks, spatialFilter);
-
-var SSAdata = joinAll.map(function(feature){
-  var joinedFeat =  ee.List(feature.get('matched'));
-  var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
-  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
-});
-
-print(SSAdata.limit(5), "SSA ADM of centroid");
 
 
 ////////////////////////////////////////////////////
