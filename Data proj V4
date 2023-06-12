@@ -1609,9 +1609,11 @@ print(grid.limit(10));
 // Percent in protected area
 //
 //////////////////////////////////////////////////
-var protect = ee.FeatureCollection("WCMC/WDPA/current/polygons");
-Map.addLayer(protect);
+var protect = ee.FeatureCollection("WCMC/WDPA/current/polygons")
+.filterBounds(area);
 
+Map.addLayer(protect);
+print(protect);
 ////////////////////////////////////////////////////
 //
 // Minimum distance to camps
