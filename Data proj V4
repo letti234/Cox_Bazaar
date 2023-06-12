@@ -1211,7 +1211,141 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-print(grid.limit(15), "Working?");
+//2006
+var WSF = ee.Image(1).select("constant").rename("set_2006")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2006)), 1)
+      .where(WSF85_15.gt(2006), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+
+//2007
+var WSF = ee.Image(1).select("constant").rename("set_2007")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2007)), 1)
+      .where(WSF85_15.gt(2007), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+
+//2008
+var WSF = ee.Image(1).select("constant").rename("set_2008")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2008)), 1)
+      .where(WSF85_15.gt(2008), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2009
+var WSF = ee.Image(1).select("constant").rename("set_2009")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2009)), 1)
+      .where(WSF85_15.gt(2009), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2010
+var WSF = ee.Image(1).select("constant").rename("set_2010")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2010)), 1)
+      .where(WSF85_15.gt(2010), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2011
+var WSF = ee.Image(1).select("constant").rename("set_2011")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2011)), 1)
+      .where(WSF85_15.gt(2011), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2012
+var WSF = ee.Image(1).select("constant").rename("set_2012")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2012)), 1)
+      .where(WSF85_15.gt(2012), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2013
+var WSF = ee.Image(1).select("constant").rename("set_2013")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2013)), 1)
+      .where(WSF85_15.gt(2013), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2014
+var WSF = ee.Image(1).select("constant").rename("set_2014")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2014)), 1)
+      .where(WSF85_15.gt(2014), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+//2015
+var WSF = ee.Image(1).select("constant").rename("set_2015")
+      .where(WSF85_15.gt(0).and(WSF85_15.lte(2015)), 1)
+      .where(WSF85_15.gt(2015), 0)
+      .where(WSF85_15.eq(0), 0)
+      
+var grid = grid.map(function(feature) {
+  return feature.set(WSF.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
+
+
+print(grid.limit(10), "Working?");
+
 
 ///Camp Measurements - distance to camp, intersects camp
 ///////////////////////////////////////////////////////
