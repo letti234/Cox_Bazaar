@@ -3,6 +3,7 @@
 //Still to do
     //Choose resolution
     //Deal with water in tiles
+    //Use renames to make variable names not hellish as you go
     
 // PRODUCE SAMPLE GRIDS
 ////////////////////////////////////////////////////////
@@ -37,7 +38,12 @@ var data = ee.ImageCollection('MODIS/006/MOD44B');
 var name = "Percent_Tree_Cover"
 
 //2000
-var tree = data.filter(ee.Filter.date('2000-01-01', '2000-12-31')).map(function(image){return image.clip(area)}).select(name).toBands();
+var tree = data.filter(ee.Filter.date('2000-01-01', '2000-12-31'))
+.map(function(image){return image.clip(area)}).select(name).toBands();
+
+var tree = tree.rename("PctFor00");
+
+print(tree, "Demo");
 
 var grid = grid.map(function(feature) {
   return feature.set(tree.reduceRegion({
@@ -48,6 +54,8 @@ var grid = grid.map(function(feature) {
 //2001
 var tree = data.filter(ee.Filter.date('2001-01-01', '2001-12-31')).map(function(image){return image.clip(area)}).select(name).toBands();
 
+var tree = tree.rename("PctFor01");
+
 var grid = grid.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
@@ -57,6 +65,8 @@ var grid = grid.map(function(feature) {
 
 //2002
 var tree = data.filter(ee.Filter.date('2002-01-01', '2002-12-31')).map(function(image){return image.clip(area)}).select(name).toBands();
+
+var tree = tree.rename("PctFor02");
 
 var grid = grid.map(function(feature) {
   return feature.set(tree.reduceRegion({
@@ -1366,11 +1376,15 @@ var grid = grid.map(function(feature) {
 var WSF15 = ee.Image('DLR/WSF/WSF2015/v1')
 
 var WSF15 = WSF15.where(WSF15.eq(0), 0)
-.where(WSF15.eq(255), 1).clip(area).clip(area).rename("WSF15_g");
+.where(WSF15.eq(255), 1).clip(area).clip(area).rename("set2_2015");
 
 
-Map.addLayer(WSF15, {}, 'WSF 2015 good');
-
+var grid = grid.map(function(feature) {
+  return feature.set(WSF15.reduceRegion({
+    reducer: 'mean', geometry: feature.geometry(),
+    crs: "EPSG:4326", scale: 10
+  }));
+});
 
 //2019
 var WSF19 = ee.Image("users/salem043/WSF19clean")
@@ -1387,6 +1401,6 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-
+print(grid.limit(10));
 var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
 Map.addLayer(camps, {col: "red"}, "Camps")
