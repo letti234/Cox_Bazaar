@@ -1063,11 +1063,68 @@ print(grid.limit(10),"Grid with first four MODIS");
 
 //////////////////////////////////////////////////////
 //
-// Hansen pct forest loss by year 2001-2020
+// Hansen num. pixels
 //
 ///////////////////////////////////////////////////////
 
 var Hansen = ee.Image("UMD/hansen/global_forest_change_2022_v1_10").clip(area);
+var lossYr = Hansen.select("lossyear")
+var cover00 = Hansen.select("treecover2000")
+
+var grid = grid.map(function(feature) {
+  return feature.set(cover00.reduceRegion({
+    reducer: 'count',
+    geometry: feature.geometry(),
+  }));
+});
+
+print(grid.limit(10), "Grid, Modis Hansen");
+
+
+//////////////////////////////////////////////////////
+//
+// Hansen num. pixels lost by year
+//
+///////////////////////////////////////////////////////
+
+// indices for years you want to calculate stats for (2001 to 2014) 
+var indices = ee.List.sequence(1,20);
+
+// map over feature collection 
+var grid = grid.map(function(feature){
+  
+  // iterate over years of interest. could modify this so you iterate over years
+  // depending on how the GFC image is masked 
+  var mdata = indices.iterate(function(i, dictin){
+    
+    // get year for this iteration 
+    var thisyear = i ;
+
+    // create property name for this year (e.g. "loss2001" for first iteration)
+    var bandname = ee.String('loss').cat(ee.Number(thisyear).int()) ;
+    
+    var gfcLossthisyear = lossYr.remap([i], [1], null);
+    
+    var dict = gfcLossthisyear
+    
+      // rename band such that the end dictionary key is unique to this year 
+      .rename(bandname)
+      
+      // get zonal statistics 
+      .reduceRegion({reducer:'count', geometry: feature.geometry(), scale: 100})
+      
+    // append zonal statistics for this year to dictionary 
+    return ee.Dictionary(dictin).combine(dict)
+    
+  }, ee.Dictionary()) // begin iteration with an empty dictionary  
+
+  // return feature with zonal stats accumulated from all years 
+  return feature.set(mdata)
+
+})
+
+print(grid.limit(10), "DID THIS WORK");
+
 
 
 
