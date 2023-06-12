@@ -1650,7 +1650,6 @@ var spatialFilter = ee.Filter.intersects({
 // Join the points and polygons and apply the spatial filter to keep only intersecting ones
 var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, parks, spatialFilter);
 
-
 // Since the join adds intersecting polygons to a new property 'matched'
 // we need to extract required info from the polygons and copy it to the points
 var ecosample = joinAll.map(function(feature){
@@ -1659,6 +1658,7 @@ var ecosample = joinAll.map(function(feature){
   return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
 
+print('sample extract', ecosample.limit(1));
 
 
 ////////////////////////////////////////////////////
