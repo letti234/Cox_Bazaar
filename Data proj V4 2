@@ -11,21 +11,66 @@
   var area = ee.FeatureCollection('users/salem043/ROI_V2_2023');
   //Map.addLayer(area, {}, "Study area");
 
-  //print(area);
+///////////////////////////////////////////////////////////////////////
+//
+//  Tile production - we'll use these tiles to calculate zonal stats.
+//  The tiles are the unit of analysis in our regression
+//
+///////////////////////////////////////////////////////////////////////
 
-  // Specify grid size in projection: 500m.
-  var projection='EPSG:4326'; // WGS84 lat lon
-  var dx=0.0045045045;
-  var dy=0.0045045045;
+var tiles = tile(area, 0.0045045045); /// 500m gridcells
 
-  // Make grid and visualize.
-  var proj=ee.Projection(projection).scale(dx, dy);
-  var grid=area.geometry().coveringGrid(proj);
-
-  Map.addLayer(grid.limit(10));
-//print(grid.limit(10), "Original grid");
+function tile(region, size_in_degrees) {
+  function tile_geometry(geometry) {
+    var coords = ee.List(geometry.bounds().coordinates().get(0))
+    var min_point = ee.List(coords.get(0))
+    var max_point = ee.List(coords.get(2))
   
+    function sequence(direction) {
+      var start = min_point.get(direction)  
+      var stop = ee.Number(max_point.get(direction))
+      return ee.List.sequence(start, stop, size_in_degrees)
+    }
   
+    var tiles = sequence(0).map(function (x) {
+      return sequence(1).map(function (y) { 
+          return ee.Feature(ee.Geometry.Rectangle([
+            [ee.Number(x), ee.Number(y)],
+            [
+              ee.Number(x).add(size_in_degrees).min(max_point.get(0)),
+              ee.Number(y).add(size_in_degrees).min(max_point.get(1))
+            ]
+        ]).intersection(geometry, 30))
+      })
+  	}).flatten()
+    return ee.FeatureCollection(tiles).filterBounds(geometry)
+  }
+
+  function tile_feature_collection(feature_collection) {
+    return ee.FeatureCollection(
+      feature_collection.iterate(
+        function (feature, acc) {
+          return ee.FeatureCollection(acc).merge(tile_geometry(ee.Feature(feature).geometry()))
+        }, ee.FeatureCollection([]))
+    )
+  }
+
+  if (region instanceof ee.FeatureCollection)
+    return tile_feature_collection(region)
+  else if (region instanceof ee.Feature)
+    return tile_geometry(region.geometry())
+  else if (region instanceof ee.Geometry)
+    return tile_geometry(region)
+  else
+    throw Error(
+      'region must be ee.FeatureCollection, ee.Feature, or ee.Geometry. Was ' + region
+    )
+}
+
+  var grid = tiles
+  
+  Map.centerObject
+  Map.addLayer(grid.limit(100), {col: "red"}, "Sample tile");
   
 //////////////////////////////////////////////////////////  
 //
