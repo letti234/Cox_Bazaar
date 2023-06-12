@@ -1381,11 +1381,7 @@ var grid = grid.map(function(feature) {
 ///Camp Measurements - distance to camp, intersects camp
 ///////////////////////////////////////////////////////
 
-
-print(grid.limit(10), "Working?");
-
-
-
+var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
 
 
 
