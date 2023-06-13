@@ -1714,13 +1714,17 @@ var joinAll = ee.Join.saveAll({matchesKey: 'matched',
 
 var joinAll_list = joinAll.toList(joinAll.size());
 
-var tileCentroids = joinAll.map(function(feature){
+var protected = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
   return ee.Algorithms.If(joinedFeat, 
                           ee.Feature(feature.copyProperties(polygon, properties)).select(properties), 
                           ee.Feature(feature));
 });
+
+var protected = protected.select(["system:index"], ["ID"]);
+
+print(protected, "With protected areas");
 
 ////////////////////////////////////////////////////
 //
@@ -1736,17 +1740,17 @@ var spatialFilter = ee.Filter.intersects({
   rightField: '.geo'
 });
 
-var properties = ["ADM1_NAME", "ADM2_NAME"];
+var properties = ["ADM1_NAME", "ADM2_NAME", "ADM3_NAME"];
 
-var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, ADM2, spatialFilter);
+var joinAll = ee.Join.saveAll('matched').apply(tileCentroids2, ADM2, spatialFilter);
 
-var tileCentroids = joinAll.map(function(feature){
+var tileCentroids3 = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
   return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
 
-print(tileCentroids, "With parks and ADM");
+print(tileCentroids3, "With parks and ADM");
 
 ////////////////////////////////////////////////////
 //
@@ -1771,7 +1775,7 @@ var joined2Camp = ee.Join.saveAll({
   measureKey: 'distance',
   ordering: 'distance'
 }).apply({
-  primary: tileCentroids, 
+  primary: tileCentroids3, 
   secondary: camps, 
   condition: spatialFilter
 });
