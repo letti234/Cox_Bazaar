@@ -76,7 +76,7 @@ function tile(region, size_in_degrees) {
 
   
   Map.centerObject
-  Map.addLayer(grid.limit(100), {col: "red"}, "Sample tile");
+//  Map.addLayer(grid.limit(100), {col: "red"}, "Sample tile");
   
 //////////////////////////////////////////////////////////  
 //
@@ -1698,7 +1698,7 @@ Map.addLayer(tileCentroids);
 
 var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 .filterBounds(area);
-Map.addLayer(parks, {col: "green"}, "Parks");
+///Map.addLayer(parks, {col: "green"}, "Parks");
 
 var properties = ["NAME"];
 
@@ -1714,7 +1714,7 @@ var joinAll = ee.Join.saveAll({matchesKey: 'matched',
 
 var joinAll_list = joinAll.toList(joinAll.size());
 
-var tileCentroids2 = joinAll.map(function(feature){
+var tileCentroids = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
   return ee.Algorithms.If(joinedFeat, 
@@ -1722,8 +1722,31 @@ var tileCentroids2 = joinAll.map(function(feature){
                           ee.Feature(feature));
 });
 
- var tileCentroids2 = tileCentroids2.select(["system:index"], ["ID"]);
-print(tileCentroids2, "Park data");
+////////////////////////////////////////////////////
+//
+// Centroid ADM2
+//
+//////////////////////////////////////////////////
+
+var ADM2 = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level2').filterBounds(area);
+//print(ADM2);
+
+var spatialFilter = ee.Filter.intersects({
+  leftField: '.geo',
+  rightField: '.geo'
+});
+
+var properties = ["ADM1_NAME", "ADM2_NAME"];
+
+var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, ADM2, spatialFilter);
+
+var tileCentroids = joinAll.map(function(feature){
+  var joinedFeat =  ee.List(feature.get('matched'));
+  var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
+  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
+});
+
+print(tileCentroids, "With parks and ADM");
 
 ////////////////////////////////////////////////////
 //
@@ -1748,7 +1771,7 @@ var joined2Camp = ee.Join.saveAll({
   measureKey: 'distance',
   ordering: 'distance'
 }).apply({
-  primary: tileCentroids2, 
+  primary: tileCentroids, 
   secondary: camps, 
   condition: spatialFilter
 });
@@ -1759,4 +1782,4 @@ var withNearestDist = joined2Camp.map(function(f) {
   return f.set('nearestDist', nearestDist);
 });
 
-print(withNearestDist);
+print(withNearestDist, "ADM, parks, and camp distances");
