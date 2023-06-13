@@ -1742,17 +1742,22 @@ var spatialFilter = ee.Filter.intersects({
   rightField: '.geo'
 });
 
-var properties = ["ADM1_NAME", "ADM2_NAME", "ADM3_NAME"];
+var properties = ["ADM1_NAME", "ADM2_NAME", "ADM3_NAME", "ID"];
 
-var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, ADM2, spatialFilter);
+var joinAll = ee.Join.saveAll({matchesKey: 'matched',
+                               outer: true
+                              }).apply(tileCentroids, ADM2, spatialFilter);
+
+var joinAll_list = joinAll.toList(joinAll.size());
 
 var ADMDta = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
-  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
+  return ee.Algorithms.If(joinedFeat, 
+                          ee.Feature(feature.copyProperties(polygon, properties)).select(properties), 
+                          ee.Feature(feature));
 });
 
-  var ADMDta = ADMDta.select(["system:index"], ["ID"]);
 
 print(ADMDta, "With ADM");
 
