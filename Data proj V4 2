@@ -1668,7 +1668,7 @@ var getCentroids = function(feature) {
   return feature.set({centralPoint: feature.centroid(0.1)});
 };
 
-var tileCenter = grid.map(getCentroids);
+var tileCenter = tiles.map(getCentroids);
 
 var tileCentroids = tileCenter.map(function(f) {
   var centroid = ee.Feature(ee.List(f.get('centralPoint')));
@@ -1698,6 +1698,7 @@ Map.addLayer(tileCentroids);
 
 var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 .filterBounds(area);
+Map.addLayer(parks, {col: "green"}, "Parks");
 
 var properties = ["NAME"];
 
@@ -1721,12 +1722,41 @@ var tileCentroids2 = joinAll.map(function(feature){
                           ee.Feature(feature));
 });
 
-print(tileCentroids2.limit(10), "With park data");
+ var tileCentroids2 = tileCentroids2.select(["system:index"], ["ID"]);
+print(tileCentroids2, "Park data");
 
 ////////////////////////////////////////////////////
 //
 // Minimum distance to camps
 //
 //////////////////////////////////////////////////
+
 var camps = ee.FeatureCollection("users/salem043/Cox_Bazar_camps")
 //Map.addLayer(camps, {col: "red"}, "Camps")
+
+
+var spatialFilter = ee.Filter.withinDistance({
+  distance: 8000000,
+  leftField: '.geo',
+  rightField: '.geo',
+  maxError: 10
+});
+
+
+var joined2Camp = ee.Join.saveAll({
+  matchesKey: 'neighbors', 
+  measureKey: 'distance',
+  ordering: 'distance'
+}).apply({
+  primary: tileCentroids2, 
+  secondary: camps, 
+  condition: spatialFilter
+});
+
+var withNearestDist = joined2Camp.map(function(f) {
+  var nearestDist = ee.Feature(ee.List(f.get('neighbors')).get(0))
+      .get('distance');
+  return f.set('nearestDist', nearestDist);
+});
+
+print(withNearestDist);
