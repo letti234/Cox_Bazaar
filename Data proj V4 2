@@ -1,17 +1,13 @@
-//Writing the entire fucking thing from scratch fuck my fucking life
+//Cox Bazar Land Use Change study
+//Colette Salemi
+//June 13th 2023
 
-//Still to do
-    //Choose resolution
-    //Add camp distances
-    //Add protectede areas
+//Code produces 500-m grid-cells across Cox's Bazar District Chattogram District, 
+//and Naikhongchari subdistrict.
 
-
-// PRODUCE SAMPLE GRIDS
-////////////////////////////////////////////////////////
-
-  //Call on study area
-  var area = ee.FeatureCollection('users/salem043/ROI_V2_2023');
-  //Map.addLayer(area, {}, "Study area");
+//Call on study area
+var area = ee.FeatureCollection('users/salem043/ROI_V2_2023');
+//Map.addLayer(area, {}, "Study area");
 
   Map.setCenter(92.11, 21.40, 8);
   
@@ -77,7 +73,9 @@ function tile(region, size_in_degrees) {
 
 //Export shapefile with ID
 
-Export.table.toDrive(grid, "Study_Area_Shp", "CB_Exports");
+var polygons = grid.filter(ee.Filter.equals('geometry_type', 'Polygon'));
+
+Export.table.toDrive(polygons, "Study_Area_Shp", "CB_Exports");
 
 
   
