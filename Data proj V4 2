@@ -1741,16 +1741,12 @@ var ADM2 = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level2').filterBo
 var ADM3 = ee.FeatureCollection
 ('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/geoboundaries/HPSCGS-ADM3').filterBounds(area).select("shapeName");
 
-//var ADM3 = ADM3.rename("ADM3_NAME");
-print(ADM3);
-
-
 var spatialFilter = ee.Filter.intersects({
   leftField: '.geo',
   rightField: '.geo'
 });
 
-var properties = ["ADM1_NAME", "ADM2_NAME", "ID"];
+var properties = ["ADM1_NAME", "ADM2_NAME"];
 
 var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, ADM2, spatialFilter);
 
@@ -1761,10 +1757,27 @@ var ADMDta = joinAll.map(function(feature){
 });
 
 
+var ADMDta = ADMDta.select({
+  propertySelectors: ['system:index', "ADM1_NAME", "ADM2_NAME"],
+  newProperties: ["ID", "ADM1_NAME", "ADM2_NAME"]
+});
+
 print(ADMDta, "With ADM");
 
-var new = protected.merge(ADM);
-print(new);
+
+
+var properties = ["shapeName"];
+
+var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, ADM3, spatialFilter);
+
+var ADM3 = joinAll.map(function(feature){
+  var joinedFeat =  ee.List(feature.get('matched'));
+  var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
+  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
+});
+
+
+print(ADM3, "ADM3");
 
 ////////////////////////////////////////////////////
 //
@@ -1801,9 +1814,33 @@ var campDist = joined2Camp.map(function(f) {
 });
 
 
-var campDist = campDist.select(["system:index"], ["ID"]);
-
-
 print(campDist, "Camp distances");
+
+
+/////////////////////////////////////////////////////////////////////
+// Combine some of this to make it less hellish to export
+////////////////////////////////////////////////////////////////////
+
+///ADMS
+
+var toyFilter = ee.Filter.equals({
+  leftField: 'system:index',
+  rightField: 'system:index',
+});
+
+var innerJoin = ee.Join.inner('primary', 'secondary');
+var toyJoin = innerJoin.apply(ADMDta, ADM3, toyFilter);
+print('Inner join toy example:', toyJoin);
+
+function cleanJoin(feature){
+  return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
+}
+
+var ADM = toyJoin.map(cleanJoin);
+
+print(ADM, "all ADM")
+//Camp and protected
+
+
 
 ///How to combine protected, ADMDta, and campDist?
