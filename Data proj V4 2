@@ -21,7 +21,7 @@
 //
 ///////////////////////////////////////////////////////////////////////
 
-var tiles = tile(area, 0.2); /// 22 km now, 0.01= 1.1 km gridcells; 500m gridcells = 0.0045045045
+var tiles = tile(area, 0.0045045045); /// 0.01= 1.1 km gridcells; 500m gridcells = 0.0045045045
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
@@ -73,6 +73,12 @@ function tile(region, size_in_degrees) {
   var grid = tiles
   
   var grid = grid.select(["system:index"], ["ID"]);
+
+
+//Export shapefile with ID
+
+Export.table.toDrive(grid, "Study_Area_Shp", "CB_Exports");
+
 
   
   Map.centerObject
@@ -1658,6 +1664,7 @@ var grid = grid.map(function(feature) {
 print(grid.limit(10), "Please freaking work");
 
 
+
 ////////////////////////////////////////////////////
 //
 // Centroid of gridcells
@@ -1680,17 +1687,8 @@ var tileCentroids = tileCenter.map(function(f) {
 var tileCentroids = tileCentroids.select(["system:index"], ["ID"]);
 
 
-print(tileCentroids, 'centroids');
-Map.addLayer(tileCentroids);
-
-////////////////////////////////////////////////////
-//
-// Export data
-//
-//////////////////////////////////////////////////
-
-//Export.table.toDrive(grid, "CB_Export_V1", "CB_Exports");
-
+//print(tileCentroids, 'centroids');
+//Map.addLayer(tileCentroids);
 
 
 
@@ -1703,8 +1701,9 @@ Map.addLayer(tileCentroids);
 var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 .filterBounds(area);
 ///Map.addLayer(parks, {col: "green"}, "Parks");
+//print(parks, "Park data");
 
-var properties = ["NAME", "ID"];
+var properties = ["NAME", "DESIG_ENG"];
 
 var spatialFilter = ee.Filter.intersects({
   leftField: '.geo',
@@ -1762,9 +1761,6 @@ var ADMDta = ADMDta.select({
   newProperties: ["ID", "ADM1_NAME", "ADM2_NAME"]
 });
 
-print(ADMDta, "With ADM");
-
-
 
 var properties = ["shapeName"];
 
@@ -1776,8 +1772,11 @@ var ADM3 = joinAll.map(function(feature){
   return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
 
+var ADM3 = ADM3.select({
+  propertySelectors: ['shapeName'],
+  newProperties: ["ADM3_NAME"]
+});
 
-print(ADM3, "ADM3");
 
 ////////////////////////////////////////////////////
 //
@@ -1807,12 +1806,17 @@ var joined2Camp = ee.Join.saveAll({
   condition: spatialFilter
 });
 
-var campDist = joined2Camp.map(function(f) {
+var campDists = joined2Camp.map(function(f) {
   var nearestDist = ee.Feature(ee.List(f.get('neighbors')).get(0))
       .get('distance');
   return f.set('nearestDist', nearestDist);
 });
 
+
+var campDist = campDists.select({
+  propertySelectors: ['ID', "nearestDist"],
+  newProperties: ['ID', "nearestDist"]
+});
 
 print(campDist, "Camp distances");
 
@@ -1822,7 +1826,6 @@ print(campDist, "Camp distances");
 ////////////////////////////////////////////////////////////////////
 
 ///ADMS
-
 var toyFilter = ee.Filter.equals({
   leftField: 'system:index',
   rightField: 'system:index',
@@ -1830,7 +1833,7 @@ var toyFilter = ee.Filter.equals({
 
 var innerJoin = ee.Join.inner('primary', 'secondary');
 var toyJoin = innerJoin.apply(ADMDta, ADM3, toyFilter);
-print('Inner join toy example:', toyJoin);
+//print('Inner join toy example:', toyJoin);
 
 function cleanJoin(feature){
   return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
@@ -1839,8 +1842,78 @@ function cleanJoin(feature){
 var ADM = toyJoin.map(cleanJoin);
 
 print(ADM, "all ADM")
-//Camp and protected
 
 
 
-///How to combine protected, ADMDta, and campDist?
+
+
+//ADM and camp
+
+var toyFilter = ee.Filter.equals({
+  leftField: 'ID',
+  rightField: 'ID',
+});
+
+var innerJoin = ee.Join.inner('primary', 'secondary');
+var toyJoin = innerJoin.apply(ADM, campDist, toyFilter);
+//print('Inner join toy example:', toyJoin);
+
+function cleanJoin(feature){
+  return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
+}
+
+var ADMCamp = toyJoin.map(cleanJoin);
+
+print(ADMCamp, "all ADM plus camp")
+
+
+
+
+
+
+//ADM camp and protected
+
+var toyFilter = ee.Filter.equals({
+  leftField: 'ID',
+  rightField: 'system:index',
+});
+
+var innerJoin = ee.Join.inner('primary', 'secondary');
+var toyJoin = innerJoin.apply(ADMCamp, protected, toyFilter);
+//print('Inner join toy example:', toyJoin);
+
+function cleanJoin(feature){
+  return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
+}
+
+var ADMCampPro = toyJoin.map(cleanJoin);
+
+print(ADMCampPro, "all ADM plus camp plus protected")
+
+
+
+
+
+//ADM camp and protected, plus GIS data
+
+var toyFilter = ee.Filter.equals({
+  leftField: 'ID',
+  rightField: 'ID',
+});
+
+var innerJoin = ee.Join.inner('primary', 'secondary');
+var toyJoin = innerJoin.apply(ADMCampPro, grid, toyFilter);
+//print('Inner join toy example:', toyJoin);
+
+function cleanJoin(feature){
+  return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
+}
+
+var finalDataFrame = toyJoin.map(cleanJoin);
+
+print(finalDataFrame, "all ADM plus camp plus protected plus big chunk of other stuff")
+
+
+Export.table.toDrive(finalDataFrame, "allTabularData", "CB_Exports");
+
+
