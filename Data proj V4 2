@@ -1763,6 +1763,9 @@ var ADMDta = joinAll.map(function(feature){
 
 print(ADMDta, "With ADM");
 
+var new = protected.merge(ADM);
+print(new);
+
 ////////////////////////////////////////////////////
 //
 // Minimum distance to camps
