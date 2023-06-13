@@ -1676,7 +1676,7 @@ var tileCentroids = tileCenter.map(function(f) {
 });
 ///Map.addLayer(tileCentroids);
 
-print(tileCentroids.limit(3), 'centroids');
+print(tileCentroids, 'centroids');
 Map.addLayer(tileCentroids);
 
 ////////////////////////////////////////////////////
