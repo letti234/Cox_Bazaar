@@ -1661,7 +1661,7 @@ var grid = grid.map(function(feature) {
   }));
 });
 
-print(grid.limit(10), "Please freaking work");
+//print(grid.limit(10), "Please freaking work");
 
 
 
@@ -1726,7 +1726,7 @@ var protected = joinAll.map(function(feature){
 });
 
 
-print(protected, "With protected areas");
+//print(protected, "With protected areas");
 
 ////////////////////////////////////////////////////
 //
@@ -1818,7 +1818,7 @@ var campDist = campDists.select({
   newProperties: ['ID', "nearestDist"]
 });
 
-print(campDist, "Camp distances");
+//print(campDist, "Camp distances");
 
 
 /////////////////////////////////////////////////////////////////////
@@ -1841,7 +1841,7 @@ function cleanJoin(feature){
 
 var ADM = toyJoin.map(cleanJoin);
 
-print(ADM, "all ADM")
+//print(ADM, "all ADM")
 
 
 
@@ -1864,7 +1864,7 @@ function cleanJoin(feature){
 
 var ADMCamp = toyJoin.map(cleanJoin);
 
-print(ADMCamp, "all ADM plus camp")
+//print(ADMCamp, "all ADM plus camp")
 
 
 
@@ -1888,7 +1888,7 @@ function cleanJoin(feature){
 
 var ADMCampPro = toyJoin.map(cleanJoin);
 
-print(ADMCampPro, "all ADM plus camp plus protected")
+//print(ADMCampPro, "all ADM plus camp plus protected")
 
 
 
@@ -1911,7 +1911,7 @@ function cleanJoin(feature){
 
 var finalDataFrame = toyJoin.map(cleanJoin);
 
-print(finalDataFrame, "all ADM plus camp plus protected plus big chunk of other stuff")
+print(finalDataFrame.limit(5), "all ADM plus camp plus protected plus big chunk of other stuff")
 
 
 Export.table.toDrive(finalDataFrame, "allTabularData", "CB_Exports");
