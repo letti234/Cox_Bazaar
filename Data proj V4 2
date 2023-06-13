@@ -1676,6 +1676,9 @@ var tileCentroids = tileCenter.map(function(f) {
 });
 ///Map.addLayer(tileCentroids);
 
+var tileCentroids = tileCentroids.select(["system:index"], ["ID"]);
+
+
 print(tileCentroids, 'centroids');
 Map.addLayer(tileCentroids);
 
@@ -1700,7 +1703,7 @@ var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 .filterBounds(area);
 ///Map.addLayer(parks, {col: "green"}, "Parks");
 
-var properties = ["NAME"];
+var properties = ["NAME", "ID"];
 
 var spatialFilter = ee.Filter.intersects({
   leftField: '.geo',
@@ -1722,7 +1725,6 @@ var protected = joinAll.map(function(feature){
                           ee.Feature(feature));
 });
 
-var protected = protected.select(["system:index"], ["ID"]);
 
 print(protected, "With protected areas");
 
@@ -1750,8 +1752,7 @@ var ADMDta = joinAll.map(function(feature){
   return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
 
-  var ADMDta = ADMDta.select(["system:index", "ADM1_NAME", "ADM2_NAME", "ADM3_NAME"], 
-  ["ID", "ADM1_NAME", "ADM2_NAME", "ADM3_NAME"]);
+  var ADMDta = ADMDta.select(["system:index"], ["ID"]);
 
 print(ADMDta, "With ADM");
 
