@@ -1742,15 +1742,18 @@ var spatialFilter = ee.Filter.intersects({
 
 var properties = ["ADM1_NAME", "ADM2_NAME", "ADM3_NAME"];
 
-var joinAll = ee.Join.saveAll('matched').apply(tileCentroids2, ADM2, spatialFilter);
+var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, ADM2, spatialFilter);
 
-var tileCentroids3 = joinAll.map(function(feature){
+var ADMDta = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
   return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
 
-print(tileCentroids3, "With parks and ADM");
+  var ADMDta = ADMDta.select(["system:index", "ADM1_NAME", "ADM2_NAME", "ADM3_NAME"], 
+  ["ID", "ADM1_NAME", "ADM2_NAME", "ADM3_NAME"]);
+
+print(ADMDta, "With ADM");
 
 ////////////////////////////////////////////////////
 //
@@ -1775,15 +1778,21 @@ var joined2Camp = ee.Join.saveAll({
   measureKey: 'distance',
   ordering: 'distance'
 }).apply({
-  primary: tileCentroids3, 
+  primary: tileCentroids, 
   secondary: camps, 
   condition: spatialFilter
 });
 
-var withNearestDist = joined2Camp.map(function(f) {
+var campDist = joined2Camp.map(function(f) {
   var nearestDist = ee.Feature(ee.List(f.get('neighbors')).get(0))
       .get('distance');
   return f.set('nearestDist', nearestDist);
 });
 
-print(withNearestDist, "ADM, parks, and camp distances");
+
+var campDist = campDist.select(["system:index"], ["ID"]);
+
+
+print(campDist, "Camp distances");
+
+///How to combine protected, ADMDta, and campDist?
