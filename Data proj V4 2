@@ -92,6 +92,7 @@ var name = "Percent_Tree_Cover"
 var tree = data.filter(ee.Filter.date('2000-01-01', '2000-12-31'))
 .map(function(image){return image.clip(area)}).select(name).toBands();
 
+
 var tree = tree.rename("PctFor00");
 
 var grid = grid.map(function(feature) {
@@ -1737,25 +1738,26 @@ print(protected, "With protected areas");
 var ADM2 = ee.FeatureCollection('FAO/GAUL_SIMPLIFIED_500m/2015/level2').filterBounds(area);
 //print(ADM2);
 
+var ADM3 = ee.FeatureCollection
+('projects/earthengine-legacy/assets/projects/sat-io/open-datasets/geoboundaries/HPSCGS-ADM3').filterBounds(area).select("shapeName");
+
+//var ADM3 = ADM3.rename("ADM3_NAME");
+print(ADM3);
+
+
 var spatialFilter = ee.Filter.intersects({
   leftField: '.geo',
   rightField: '.geo'
 });
 
-var properties = ["ADM1_NAME", "ADM2_NAME", "ADM3_NAME", "ID"];
+var properties = ["ADM1_NAME", "ADM2_NAME", "ID"];
 
-var joinAll = ee.Join.saveAll({matchesKey: 'matched',
-                               outer: true
-                              }).apply(tileCentroids, ADM2, spatialFilter);
-
-var joinAll_list = joinAll.toList(joinAll.size());
+var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, ADM2, spatialFilter);
 
 var ADMDta = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
-  return ee.Algorithms.If(joinedFeat, 
-                          ee.Feature(feature.copyProperties(polygon, properties)).select(properties), 
-                          ee.Feature(feature));
+  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
 
 
