@@ -2,7 +2,9 @@
 
 //Still to do
     //Choose resolution
-    //Deal with water in tiles
+    //Add camp distances
+    //Add protectede areas
+
 
 // PRODUCE SAMPLE GRIDS
 ////////////////////////////////////////////////////////
@@ -11,13 +13,15 @@
   var area = ee.FeatureCollection('users/salem043/ROI_V2_2023');
   //Map.addLayer(area, {}, "Study area");
 
+  Map.setCenter(92.11, 21.40, 8);
+  
 ///////////////////////////////////////////////////////////////////////
 //
 //  Sample grid production
 //
 ///////////////////////////////////////////////////////////////////////
 
-var tiles = tile(area, 0.01); /// 1.1 km gridcells; 500m gridcells = 0.0045045045
+var tiles = tile(area, 0.2); /// 22 km now, 0.01= 1.1 km gridcells; 500m gridcells = 0.0045045045
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
@@ -1673,7 +1677,7 @@ var tileCentroids = tileCenter.map(function(f) {
 ///Map.addLayer(tileCentroids);
 
 print(tileCentroids.limit(3), 'centroids');
-
+Map.addLayer(tileCentroids);
 
 ////////////////////////////////////////////////////
 //
@@ -1681,7 +1685,7 @@ print(tileCentroids.limit(3), 'centroids');
 //
 //////////////////////////////////////////////////
 
-Export.table.toDrive(grid, "CB_Export_V1", "CB_Exports");
+//Export.table.toDrive(grid, "CB_Export_V1", "CB_Exports");
 
 
 
@@ -1695,6 +1699,29 @@ Export.table.toDrive(grid, "CB_Export_V1", "CB_Exports");
 var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 .filterBounds(area);
 
+var properties = ["NAME"];
+
+var spatialFilter = ee.Filter.intersects({
+  leftField: '.geo',
+  rightField: '.geo'
+});
+
+
+var joinAll = ee.Join.saveAll({matchesKey: 'matched',
+                               outer: true
+                              }).apply(tileCentroids, parks, spatialFilter);
+
+var joinAll_list = joinAll.toList(joinAll.size());
+
+var tileCentroids2 = joinAll.map(function(feature){
+  var joinedFeat =  ee.List(feature.get('matched'));
+  var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
+  return ee.Algorithms.If(joinedFeat, 
+                          ee.Feature(feature.copyProperties(polygon, properties)).select(properties), 
+                          ee.Feature(feature));
+});
+
+print(tileCentroids2.limit(10), "With park data");
 
 ////////////////////////////////////////////////////
 //
