@@ -1913,13 +1913,13 @@ print(finalDataFrame.limit(5), "all ADM plus camp plus protected plus big chunk 
 
 //Subet data
 
-var dta1 = finalDataFrame.filter(ee.Filter.equals('ADM2_NAME', "Chittagong"));
+var dta1 = finalDataFrame.filter(ee.Filter.equals('ADM3_NAME', "Ramu"));
 var dta2 = finalDataFrame.filter(ee.Filter.notEquals('ADM2_NAME', "Chittagong"));
 
-print(dta1.limit(5), "subset to Chittagong");
+print(dta1.limit(5), "subset to Ramu");
 print(dta2.limit(5), "subset to CB and Banderban");
 
-Export.table.toDrive(dta1, "Tabular_CH", "CB_Exports");
+Export.table.toDrive(dta1, "Tabular_Ramu", "CB_Exports");
 Export.table.toDrive(dta1, "Tabular_CB_NAI", "CB_Exports");
 
 
