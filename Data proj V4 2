@@ -85,6 +85,7 @@ Export.table.toDrive(polygons, "Study_Area_Shp", "CB_Exports");
 //////////////////////////////////////////////////////////  
 //
 //Percent Forest - MODIS 2000-2020
+//Uses reducers
 //
 //////////////////////////////////////////////////////////
 
@@ -333,6 +334,9 @@ var grid = grid.map(function(feature) {
   }));
 });
 
+print(grid.limit(10));
+
+Export.table.toDrive(grid, "Tabular_MODIS", "CB_Exports");
 
 
 //////////////////////////////////////////////////////////  
