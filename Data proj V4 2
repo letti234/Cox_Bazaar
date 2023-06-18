@@ -353,7 +353,7 @@ var tree = data.filter(ee.Filter.date('2000-01-01', '2000-12-31')).map(function(
 
 var tree = tree.rename("PctVeg00");
 
-var gridMODIS2 = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -364,7 +364,7 @@ var tree = data.filter(ee.Filter.date('2001-01-01', '2001-12-31')).map(function(
 
 var tree = tree.rename("PctVeg01");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -376,7 +376,7 @@ var tree = data.filter(ee.Filter.date('2002-01-01', '2002-12-31')).map(function(
 
 var tree = tree.rename("PctVeg02");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -387,7 +387,7 @@ var tree = data.filter(ee.Filter.date('2003-01-01', '2003-12-31')).map(function(
 
 var tree = tree.rename("PctVeg03");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -398,7 +398,7 @@ var tree = data.filter(ee.Filter.date('2004-01-01', '2004-12-31')).map(function(
 
 var tree = tree.rename("PctVeg04");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -409,7 +409,7 @@ var tree = data.filter(ee.Filter.date('2005-01-01', '2005-12-31')).map(function(
 
 var tree = tree.rename("PctVeg05");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -420,7 +420,7 @@ var tree = data.filter(ee.Filter.date('2006-01-01', '2006-12-31')).map(function(
 
 var tree = tree.rename("PctVeg06");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -431,7 +431,7 @@ var tree = data.filter(ee.Filter.date('2007-01-01', '2007-12-31')).map(function(
 
 var tree = tree.rename("PctVeg07");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -443,7 +443,7 @@ var tree = data.filter(ee.Filter.date('2008-01-01', '2008-12-31')).map(function(
 
 var tree = tree.rename("PctVeg08");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -455,7 +455,7 @@ var tree = data.filter(ee.Filter.date('2009-01-01', '2009-12-31')).map(function(
 
 var tree = tree.rename("PctVeg09");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -466,7 +466,7 @@ var tree = data.filter(ee.Filter.date('2010-01-01', '2010-12-31')).map(function(
 
 var tree = tree.rename("PctVeg10");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -477,7 +477,7 @@ var tree = data.filter(ee.Filter.date('2011-01-01', '2011-12-31')).map(function(
 
 var tree = tree.rename("PctVeg11");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -489,7 +489,7 @@ var tree = data.filter(ee.Filter.date('2012-01-01', '2012-12-31')).map(function(
 
 var tree = tree.rename("PctVeg12");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -500,7 +500,7 @@ var tree = data.filter(ee.Filter.date('2013-01-01', '2013-12-31')).map(function(
 
 var tree = tree.rename("PctVeg13");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -512,7 +512,7 @@ var tree = data.filter(ee.Filter.date('2014-01-01', '2014-12-31')).map(function(
 
 var tree = tree.rename("PctVeg14");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -524,7 +524,7 @@ var tree = data.filter(ee.Filter.date('2015-01-01', '2015-12-31')).map(function(
 
 var tree = tree.rename("PctVeg15");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -535,7 +535,7 @@ var tree = data.filter(ee.Filter.date('2016-01-01', '2016-12-31')).map(function(
 
 var tree = tree.rename("PctVeg16");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -547,7 +547,7 @@ var tree = data.filter(ee.Filter.date('2017-01-01', '2017-12-31')).map(function(
 
 var tree = tree.rename("PctVeg17");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -558,7 +558,7 @@ var tree = data.filter(ee.Filter.date('2018-01-01', '2018-12-31')).map(function(
 
 var tree = tree.rename("PctVeg18");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -569,7 +569,7 @@ var tree = data.filter(ee.Filter.date('2019-01-01', '2019-12-31')).map(function(
 
 var tree = tree.rename("PctVeg19");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
@@ -581,13 +581,16 @@ var tree = data.filter(ee.Filter.date('2020-01-01', '2020-12-31')).map(function(
 
 var tree = tree.rename("PctVeg20");
 
-var grid = grid.map(function(feature) {
+var gridMODIS = gridMODIS.map(function(feature) {
   return feature.set(tree.reduceRegion({
     reducer: 'mean', geometry: feature.geometry(),
   }));
 });
 
-//print(grid.limit(10),"Grid with first two MODIS");
+
+print(gridMODIS.limit(10));
+
+Export.table.toDrive(gridMODIS, "Tabular_MODIS_2", "CB_Exports");
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -836,7 +839,6 @@ var grid = grid.map(function(feature) {
     reducer: 'mean', geometry: feature.geometry(),
   }));
 });
-
 
 //print(grid.limit(10),"Grid with first three MODIS");
 
