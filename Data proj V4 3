@@ -17,7 +17,7 @@ var area = ee.FeatureCollection('users/salem043/ROI_V2_2023');
 //
 ///////////////////////////////////////////////////////////////////////
 
-var tiles = tile(area, 0.1); /// 0.01= 1.1 km gridcells; 500m gridcells = 0.0045045045
+var tiles = tile(area,  0.0045045045); /// 0.01= 1.1 km gridcells; 500m gridcells = 0.0045045045
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
@@ -1854,88 +1854,3 @@ var campDist = campDists.select({
 
 print(campDist.limit(10), "Camp distances");
 Export.table.toDrive(campDist, "Dist_Camps", "CB_Exports");
-
-/////////////////////////////////////////////////////////////////////
-// Combine some of this to make it less hellish to export
-////////////////////////////////////////////////////////////////////
-
-
-
-//ADM and camp
-
-var toyFilter = ee.Filter.equals({
-  leftField: 'ID',
-  rightField: 'ID',
-});
-
-var innerJoin = ee.Join.inner('primary', 'secondary');
-var toyJoin = innerJoin.apply(ADM, campDist, toyFilter);
-//print('Inner join toy example:', toyJoin);
-
-function cleanJoin(feature){
-  return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
-}
-
-var ADMCamp = toyJoin.map(cleanJoin);
-
-//print(ADMCamp, "all ADM plus camp")
-
-
-
-
-
-
-//ADM camp and protected
-
-var toyFilter = ee.Filter.equals({
-  leftField: 'ID',
-  rightField: 'system:index',
-});
-
-var innerJoin = ee.Join.inner('primary', 'secondary');
-var toyJoin = innerJoin.apply(ADMCamp, protected, toyFilter);
-//print('Inner join toy example:', toyJoin);
-
-function cleanJoin(feature){
-  return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
-}
-
-var ADMCampPro = toyJoin.map(cleanJoin);
-
-//print(ADMCampPro, "all ADM plus camp plus protected")
-
-
-
-
-
-//ADM camp and protected, plus GIS data
-
-var toyFilter = ee.Filter.equals({
-  leftField: 'ID',
-  rightField: 'ID',
-});
-
-var innerJoin = ee.Join.inner('primary', 'secondary');
-var toyJoin = innerJoin.apply(ADMCampPro, grid, toyFilter);
-//print('Inner join toy example:', toyJoin);
-
-function cleanJoin(feature){
-  return ee.Feature(feature.get('primary')).copyProperties(feature.get('secondary'));
-}
-
-var finalDataFrame = toyJoin.map(cleanJoin);
-
-print(finalDataFrame.limit(5), "all ADM plus camp plus protected plus big chunk of other stuff")
-
-//Subet data
-
-var dta1 = finalDataFrame.filter(ee.Filter.equals('ADM3_NAME', "Ramu"));
-var dta2 = finalDataFrame.filter(ee.Filter.notEquals('ADM2_NAME', "Chittagong"));
-
-print(dta1.limit(5), "subset to Ramu");
-print(dta2.limit(5), "subset to CB and Banderban");
-
-Export.table.toDrive(dta1, "Tabular_Ramu", "CB_Exports");
-Export.table.toDrive(dta1, "Tabular_CB_NAI", "CB_Exports");
-
-
