@@ -1423,6 +1423,9 @@ var gridHansen = gridHansen.map(function(feature) {
 });
 
 print(gridHansen.limit(10), "Hansen export");
+Export.table.toDrive(gridHansen, "Tabular_Hansen", "CB_Exports");
+
+
 
 ////////////////////////////////////////////////////////
 //
@@ -1673,6 +1676,8 @@ var gridWSF = gridWSF.map(function(feature) {
   }));
 });
 
+print(gridWSF, "WSF data")
+Export.table.toDrive(gridWSF, "Tabular_WSF", "CB_Exports");
 
 
 ////////////////////////////////////////////////////
@@ -1723,7 +1728,7 @@ var spatialFilter = ee.Filter.intersects({
 
 var joinAll = ee.Join.saveAll({matchesKey: 'matched',
                                outer: true
-                              }).apply(tileCentroids, parks, spatialFilter);
+                              }).apply(grid, parks, spatialFilter);
 
 var joinAll_list = joinAll.toList(joinAll.size());
 
@@ -1736,7 +1741,7 @@ var protected = joinAll.map(function(feature){
 });
 
 
-//print(protected, "With protected areas");
+print(protected.limit(10), "With protected areas");
 
 ////////////////////////////////////////////////////
 //
