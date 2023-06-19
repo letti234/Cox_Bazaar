@@ -1718,26 +1718,20 @@ var parks = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 
 var properties = ["NAME", "DESIG_ENG"];
 
+
 var spatialFilter = ee.Filter.intersects({
   leftField: '.geo',
   rightField: '.geo'
 });
 
 
-var joinAll = ee.Join.saveAll({matchesKey: 'matched',
-                               outer: true
-                              }).apply(grid, parks, spatialFilter);
-
-var joinAll_list = joinAll.toList(joinAll.size());
+var joinAll = ee.Join.saveAll('matched').apply(tileCentroids, parks, spatialFilter);
 
 var protected = joinAll.map(function(feature){
   var joinedFeat =  ee.List(feature.get('matched'));
   var polygon = ee.Feature(ee.FeatureCollection(joinedFeat).first());
-  return ee.Algorithms.If(joinedFeat, 
-                          ee.Feature(feature.copyProperties(polygon, properties)).select(properties), 
-                          ee.Feature(feature));
+  return ee.Feature(feature.copyProperties(polygon, properties)).select(properties);
 });
-
 
 print(protected.limit(10), "With protected areas");
 
