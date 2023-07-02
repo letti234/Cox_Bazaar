@@ -19,7 +19,7 @@ var lights12 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2012-01-01', '2012-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print("2012", lights12);
 
 
@@ -27,7 +27,7 @@ var lights13 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2013-01-01', '2013-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights13);
 
 
@@ -35,7 +35,7 @@ var lights14 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2014-01-01', '2014-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights14);
 
 
@@ -43,7 +43,7 @@ var lights15 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2015-01-01', '2015-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights15);
 
 
@@ -51,14 +51,14 @@ var lights16 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2016-01-01', '2016-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights16);
 
 var lights17 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2017-01-01', '2017-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights17);
 Map.addLayer(lights12);
 
@@ -66,30 +66,116 @@ var lights18 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2018-01-01', '2018-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights18);
 
 var lights19 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2019-01-01', '2019-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights19);
 
 var lights20 = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMCFG')
                   .filter(ee.Filter.date('2020-01-01', '2020-12-31')) 
                   .map(function(image){return image.clip(geometry)})
                   .select("avg_rad")
-                  .reduce(ee.Reducer.max());
+                  .reduce(ee.Reducer.median());
 print(lights20);
 
 
 Export.image.toDrive({
   image: lights12,
-  scale: 30,
+  scale: 100,
   description: 'VIIRS12',
   fileFormat: 'GEOTIFF',
   folder: "VIIRS_CB_V1",
   maxPixels: 992227573612 
 });
+
+
+
+Export.image.toDrive({
+  image: lights13,
+  scale: 100,
+  description: 'VIIRS13',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+
+Export.image.toDrive({
+  image: lights14,
+  scale: 100,
+  description: 'VIIRS14',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+
+Export.image.toDrive({
+  image: lights15,
+  scale: 100,
+  description: 'VIIRS15',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+
+Export.image.toDrive({
+  image: lights16,
+  scale: 100,
+  description: 'VIIRS16',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+
+
+Export.image.toDrive({
+  image: lights17,
+  scale: 100,
+  description: 'VIIRS17',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+Export.image.toDrive({
+  image: lights18,
+  scale: 100,
+  description: 'VIIRS18',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+Export.image.toDrive({
+  image: lights19,
+  scale: 100,
+  description: 'VIIRS19',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+
+Export.image.toDrive({
+  image: lights20,
+  scale: 100,
+  description: 'VIIRS20',
+  fileFormat: 'GEOTIFF',
+  folder: "VIIRS_CB_V1",
+  maxPixels: 992227573612 
+});
+
+
+
+
+
+
 
