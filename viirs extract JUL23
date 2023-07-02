@@ -1,0 +1,33 @@
+
+var CB = ee.FeatureCollection('users/salem043/Bangladesh/CB_shapefile');
+Map.addLayer(CB);
+
+// get the 2015 image collection, we're using the "avg_rad" band
+var viirs = ee.ImageCollection("NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG")
+.select('avg_rad').map(function(image){return image.clip(CB)});
+
+
+
+var start = 2012;
+var end = 2020;
+
+var year = ee.List.sequence(start, end);
+
+
+function viirs_annual_median_reduce(year) {
+  var filteredCollection = ee.ImageCollection(viirs)
+    .filter(ee.Filter.calendarRange(year, year, 'year'))
+    .select('avg_rad');
+  
+  var medianImage = filteredCollection.median()
+    .set('year', year);
+  
+  return medianImage;
+}
+
+// Create an ImageCollection from the annual median estimates using the map function
+var yearComps = ee.ImageCollection.fromImages(year.map(viirs_annual_median_reduce));
+//var batch = require('users/fitoprincipe/geetools:batch');
+//batch.Download.ImageCollection.toDrive(ndvi, "Ethiopia_NDVI", {scale:250});
+
+print(yearComps);
