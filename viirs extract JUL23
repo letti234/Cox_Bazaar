@@ -8,7 +8,7 @@ var viirs = ee.ImageCollection("NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG")
 
 
 
-var start = 2012;
+var start = 2014;
 var end = 2020;
 
 var year = ee.List.sequence(start, end);
@@ -27,7 +27,18 @@ function viirs_annual_median_reduce(year) {
 
 // Create an ImageCollection from the annual median estimates using the map function
 var yearComps = ee.ImageCollection.fromImages(year.map(viirs_annual_median_reduce));
-//var batch = require('users/fitoprincipe/geetools:batch');
-//batch.Download.ImageCollection.toDrive(ndvi, "Ethiopia_NDVI", {scale:250});
-
 print(yearComps);
+
+var one = yearComps.first();
+var scale = one.select(['avg_rad']).projection().nominalScale();
+
+print(one);
+
+var batch = require('users/fitoprincipe/geetools:batch');
+
+
+
+batch.Download.ImageCollection.toDrive(yearComps, "Ethiopia_NDVI", {scale:100});
+
+
+  // ee.Number
