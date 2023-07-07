@@ -1,0 +1,33 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[91.52782305438333, 22.301690869906604],
+          [91.52782305438333, 20.55296753896883],
+          [92.65941485125833, 20.55296753896883],
+          [92.65941485125833, 22.301690869906604]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+var data = ee.ImageCollection("LANDSAT/LC08/C01/T1_ANNUAL_NDVI")
+.filter(ee.Filter.date('2019-01-01', '2019-12-31'))
+.map(function(image){return image.clip(geometry)}).toBands();
+
+
+print(data);
+
+Map.addLayer(data);
+
+
+Export.image.toDrive({
+  image: data,
+  scale: 30,
+  description: 'ndvi2019',
+  fileFormat: 'GEOTIFF',
+  folder: "Refugee camps and natural capital"
+});
