@@ -89,3 +89,5 @@ Map.addLayer(lc_19, dwVisParams, 'Land cover 2019');
 Map.addLayer(lc_20, dwVisParams, 'Land cover 2020');
 Map.addLayer(lc_21, dwVisParams, 'Land cover 2021');
 Map.addLayer(lc_22, dwVisParams, 'Land cover 2022');
+
+
