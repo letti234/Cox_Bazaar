@@ -6,10 +6,11 @@
 var roi = ee.FeatureCollection("FAO/GAUL/2015/level2").
 filter(ee.Filter.eq("ADM2_NAME", "Cox's Bazar"));
 
-//Image collection subset to ROI
+//LULC classifications subset to ROI
 var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
  .filterBounds(roi).select("label");
  
+
 //Examine data dates
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -89,5 +90,15 @@ Map.addLayer(lc_19, dwVisParams, 'Land cover 2019');
 Map.addLayer(lc_20, dwVisParams, 'Land cover 2020');
 Map.addLayer(lc_21, dwVisParams, 'Land cover 2021');
 Map.addLayer(lc_22, dwVisParams, 'Land cover 2022');
+
+
+Export.image.toDrive({
+  image: lc_16,
+  scale: 10,
+  description: 'LULC_2016',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
 
 
