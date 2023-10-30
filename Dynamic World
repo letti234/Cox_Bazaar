@@ -1,5 +1,17 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #d63000 */ee.Geometry.MultiPoint();
+var geometry = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[91.71146148381821, 22.067618064973296],
+          [91.71146148381821, 20.614582872441776],
+          [92.51346343694321, 20.614582872441776],
+          [92.51346343694321, 22.067618064973296]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 //Call on data
@@ -11,7 +23,8 @@ filter(ee.Filter.eq("ADM2_NAME", "Cox's Bazar"));
 
 //LULC classifications subset to ROI
 var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
- .filterBounds(roi).select("label");
+ .map(function(image){return image.clip(geometry)})
+ .select("label");
  
 
 //Examine data dates
@@ -99,6 +112,60 @@ Export.image.toDrive({
   image: lc_16,
   scale: 10,
   description: 'LULC_2016',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
+
+Export.image.toDrive({
+  image: lc_17,
+  scale: 10,
+  description: 'LULC_2017',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
+
+Export.image.toDrive({
+  image: lc_18,
+  scale: 10,
+  description: 'LULC_2018',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
+
+Export.image.toDrive({
+  image: lc_19,
+  scale: 10,
+  description: 'LULC_2019',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
+
+Export.image.toDrive({
+  image: lc_20,
+  scale: 10,
+  description: 'LULC_2020',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
+
+Export.image.toDrive({
+  image: lc_21,
+  scale: 10,
+  description: 'LULC_2021',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
+
+Export.image.toDrive({
+  image: lc_22,
+  scale: 10,
+  description: 'LULC_2022',
   fileFormat: 'GEOTIFF',
   folder: "CB_EXPORT_DW",  
   maxPixels: 9e12
