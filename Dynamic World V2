@@ -277,59 +277,59 @@ var dta_2022 = reclassifyImage(lc_22, reclassRules);
 // // Map check
 // var customPalette = ['white', 'green'];
 // // Visualize the reclassified image using the custom palette
-// Map.addLayer(dta_16, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2016');
-// Map.addLayer(dta_17, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2017');
-// Map.addLayer(dta_18, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2018');
-// Map.addLayer(dta_19, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2019');
-// Map.addLayer(dta_20, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2020');
-// Map.addLayer(dta_21, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2021');
-// Map.addLayer(dta_22, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2022');
+// Map.addLayer(dta_2016, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2016');
+// Map.addLayer(dta_2017, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2017');
+// Map.addLayer(dta_2018, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2018');
+// Map.addLayer(dta_2019, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2019');
+// Map.addLayer(dta_2020, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2020');
+// Map.addLayer(dta_2021, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2021');
+// Map.addLayer(dta_2022, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2022');
 
 
 //Apply reducer to 2016 
-var tiles = forest_2016.reduceRegions({
+var tiles = dta_2016.reduceRegions({
   collection: tiles,
   reducer: ee.Reducer.mean().setOutputs(["forest_2016"]),
   scale: 10, 
 });
 
 //Apply reducer to 2017 
-var tiles = forest_2017.reduceRegions({
+var tiles = dta_2017.reduceRegions({
   collection: tiles,
   reducer: ee.Reducer.mean().setOutputs(["forest_2017"]),
   scale: 10, 
 });
 
 //Apply reducer to 2018 
-var tiles = forest_2018.reduceRegions({
+var tiles = dta_2018.reduceRegions({
   collection: tiles,
   reducer: ee.Reducer.mean().setOutputs(["forest_2018"]),
   scale: 10, 
 });
 
 //Apply reducer to 2019 
-var tiles = forest_2019.reduceRegions({
+var tiles = dta_2019.reduceRegions({
   collection: tiles,
   reducer: ee.Reducer.mean().setOutputs(["forest_2019"]),
   scale: 10, 
 });
 
 //Apply reducer to 2020 
-var tiles = forest_2020.reduceRegions({
+var tiles = dta_2020.reduceRegions({
   collection: tiles,
   reducer: ee.Reducer.mean().setOutputs(["forest_2020"]),
   scale: 10, 
 });
 
 //Apply reducer to 2021 
-var tiles = forest_2021.reduceRegions({
+var tiles = dta_2021.reduceRegions({
   collection: tiles,
   reducer: ee.Reducer.mean().setOutputs(["forest_2021"]),
   scale: 10, 
 });
 
 //Apply reducer to 2022
-var tiles = forest_2022.reduceRegions({
+var tiles = dta_2022.reduceRegions({
   collection: tiles,
   reducer: ee.Reducer.mean().setOutputs(["forest_2022"]),
   scale: 10, 
@@ -343,6 +343,94 @@ print(tiles.limit(2));
 // // Map zonal statistics: percent grasslands cover
 // //
 // //////////////////////////////////////////////////////////////////////////////////
+
+
+// Define your reclassification rules as an object
+var reclassRules = {
+  'Water': [0, 0],
+  'Trees': [1, 0],
+  'Grasslands': [2, 1],
+  'Flooded Vegetation': [3, 0],
+  'Crops': [4, 0],
+  'Shrubland/Scrubland': [5, 0],
+  'Built Area': [6, 0],
+  'Bare Ground': [7, 0],
+  'Snow and Ice': [8, 0]
+};
+
+// Reclassify every data year into a forset
+var dta_2016 = reclassifyImage(lc_16, reclassRules);
+var dta_2017 = reclassifyImage(lc_17, reclassRules);
+var dta_2018 = reclassifyImage(lc_18, reclassRules);
+var dta_2019 = reclassifyImage(lc_19, reclassRules);
+var dta_2020 = reclassifyImage(lc_20, reclassRules);
+var dta_2021 = reclassifyImage(lc_21, reclassRules);
+var dta_2022 = reclassifyImage(lc_22, reclassRules);
+
+
+// Map check
+var customPalette = ['white', 'green'];
+// Visualize the reclassified image using the custom palette
+Map.addLayer(dta_16, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2016');
+Map.addLayer(dta_17, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2017');
+Map.addLayer(dta_18, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2018');
+Map.addLayer(dta_19, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2019');
+Map.addLayer(dta_20, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2020');
+Map.addLayer(dta_21, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2021');
+Map.addLayer(dta_22, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2022');
+
+
+//Apply reducer to 2016 
+var tiles = dta_2016.reduceRegions({
+  collection: tiles,
+  reducer: ee.Reducer.mean().setOutputs(["grass_2016"]),
+  scale: 10, 
+});
+
+//Apply reducer to 2017 
+var tiles = dta_2017.reduceRegions({
+  collection: tiles,
+  reducer: ee.Reducer.mean().setOutputs(["grass_2017"]),
+  scale: 10, 
+});
+
+//Apply reducer to 2018 
+var tiles = dta_2018.reduceRegions({
+  collection: tiles,
+  reducer: ee.Reducer.mean().setOutputs(["grass_2018"]),
+  scale: 10, 
+});
+
+//Apply reducer to 2019 
+var tiles = dta_2019.reduceRegions({
+  collection: tiles,
+  reducer: ee.Reducer.mean().setOutputs(["grass_2019"]),
+  scale: 10, 
+});
+
+//Apply reducer to 2020 
+var tiles = dta_2020.reduceRegions({
+  collection: tiles,
+  reducer: ee.Reducer.mean().setOutputs(["grass_2020"]),
+  scale: 10, 
+});
+
+//Apply reducer to 2021 
+var tiles = dta_2021.reduceRegions({
+  collection: tiles,
+  reducer: ee.Reducer.mean().setOutputs(["grass_2021"]),
+  scale: 10, 
+});
+
+//Apply reducer to 2022
+var tiles = dta_2022.reduceRegions({
+  collection: tiles,
+  reducer: ee.Reducer.mean().setOutputs(["grass_2022"]),
+  scale: 10, 
+});
+
+
+print(tiles.limit(2));
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
