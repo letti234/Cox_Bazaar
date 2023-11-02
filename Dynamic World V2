@@ -77,7 +77,7 @@ var roiGeo = roiGeo.difference(camps, 1);
 //////////////////////////////////////////////////////////////////////////////////
 
 
-var tiles = tile(roiGeo, 0.1); //TURN BACK TO 0.01 deg (or lower)
+var tiles = tile(roiGeo, 0.005); //about 550/550m
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
@@ -912,6 +912,8 @@ var tiles = dta_2022.reduceRegions({
 
 print(tiles.limit(1), "Tiles with all LULC zonal stats");
 
+
+//Export this object which I can likely work with in R.
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
