@@ -22,14 +22,11 @@ var geometry =
 
 
 //Cox Bazar shapefile ADD NAIKHONGCHARI
-var CB= ee.FeatureCollection("FAO/GAUL/2015/level2").
-filter(ee.Filter.eq("ADM2_NAME", "Cox's Bazar"));
+var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila");
+Map.addLayer(roi);
 
-var Nai = ee.FeatureCollection("users/salem043/Bangladesh/BGD_ADM3")
-.filter(ee.Filter.eq("shapeName", "Naikhongchari"));
-print(Nai);
-
-Map.addLayer(Nai);
+var roiGeo = roi.union().geometry();
+Map.addLayer(roiGeo);
 
 //LULC classifications subset to ROI
 var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
