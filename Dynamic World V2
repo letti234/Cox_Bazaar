@@ -139,13 +139,13 @@ Map.centerObject(roi, 9);
 
 
 var addArea = function(feature) {
-  return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
+  return feature.set({areaMeasure: feature.geometry().area()});
 };
 
 // Map the area getting function over the FeatureCollection.
 var tiles = tiles.map(addArea);
 
-// print("Tiles with area variable", tiles.limit(5));
+print("Tiles with area variable", tiles.limit(5));
 
 
 
@@ -631,7 +631,7 @@ var tiles = dta_2022.reduceRegions({
   scale: 10, 
 });
 
-print(tiles.limit(1));
+// print(tiles.limit(1));
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
@@ -910,6 +910,7 @@ var tiles = dta_2022.reduceRegions({
   scale: 10, 
 });
 
+print(tiles.limit(1), "Tiles with all LULC zonal stats");
 
 
 // //////////////////////////////////////////////////////////////////////////////////
