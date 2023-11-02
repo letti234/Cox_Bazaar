@@ -129,7 +129,7 @@ var addArea = function(feature) {
 // Map the area getting function over the FeatureCollection.
 var tiles = tiles.map(addArea);
 
-print("Tiles with area variable", tiles.limit(5));
+// print("Tiles with area variable", tiles.limit(5));
 
 
 
@@ -233,21 +233,26 @@ Map.centerObject(roi);
 // //
 // //////////////////////////////////////////////////////////////////////////////////
 
-var forest_16 = ee.Image(1)
-      .where(lc_16.eq(0), 0) //Water
-      .where(lc_16.eq(1), 1) //Trees
-      .where(lc_16.eq(2), 0) //Grasslands
-      .where(lc_16.eq(3), 0) //Flooded veg
-      .where(lc_16.eq(4), 0) //Crops
-      .where(lc_16.eq(5), 0) //Shrubland/scrubland
-      .where(lc_16.eq(6), 0) //Built area
-      .where(lc_16.eq(7), 0) //Bare ground
-      .where(lc_16.eq(8), 0); //Snow and ice
+// var forest_2016 = ee.Image(1)
+//       .where(lc_16.eq(0), 0) //Water
+//       .where(lc_16.eq(1), 1) //Trees
+//       .where(lc_16.eq(2), 0) //Grasslands
+//       .where(lc_16.eq(3), 0) //Flooded veg
+//       .where(lc_16.eq(4), 0) //Crops
+//       .where(lc_16.eq(5), 0) //Shrubland/scrubland
+//       .where(lc_16.eq(6), 0) //Built area
+//       .where(lc_16.eq(7), 0) //Bare ground
+//       .where(lc_16.eq(8), 0); //Snow and ice
       
-// Map.addLayer(forest_16, {min: 0, max: 1,palette: ['white', 'green']
-// }, "Reclassification");
-// Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
- 
+// //Apply reducer to 2016 
+// var tiles = forest_2016.reduceRegions({
+//   collection: tiles,
+//   reducer: ee.Reducer.mean().setOutputs(["forest_2016"]),
+//   scale: 10, 
+// });
+
+
+
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
