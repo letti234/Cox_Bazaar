@@ -371,13 +371,13 @@ var dta_2022 = reclassifyImage(lc_22, reclassRules);
 // Map check
 var customPalette = ['white', 'green'];
 // Visualize the reclassified image using the custom palette
-Map.addLayer(dta_16, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2016');
-Map.addLayer(dta_17, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2017');
-Map.addLayer(dta_18, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2018');
-Map.addLayer(dta_19, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2019');
-Map.addLayer(dta_20, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2020');
-Map.addLayer(dta_21, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2021');
-Map.addLayer(dta_22, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2022');
+Map.addLayer(dta_2016, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2016');
+Map.addLayer(dta_2017, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2017');
+Map.addLayer(dta_2018, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2018');
+Map.addLayer(dta_2019, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2019');
+Map.addLayer(dta_2020, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2020');
+Map.addLayer(dta_2021, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2021');
+Map.addLayer(dta_2022, {min: 0, max: 1, palette: customPalette}, 'Reclassified 2022');
 
 
 //Apply reducer to 2016 
