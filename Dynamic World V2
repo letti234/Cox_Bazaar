@@ -833,9 +833,9 @@ var reclassRules = {
   'Grasslands': [2, 0],
   'Flooded Vegetation': [3, 0],
   'Crops': [4, 0],
-  'Shrubland/Scrubland': [5, 1],
+  'Shrubland/Scrubland': [5, 0],
   'Built Area': [6, 0],
-  'Bare Ground': [7, 0],
+  'Bare Ground': [7, 1],
   'Snow and Ice': [8, 0]
 };
 
