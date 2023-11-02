@@ -46,7 +46,7 @@ var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
 
 //Refugee camps
 var camps = ee.FeatureCollection("users/salem043/Bangladesh/Cox_Bazar_Simple_Borders");
-// Map.addLayer(camps);
+Map.addLayer(camps);
 
 //Protected areas
 var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BGD");
@@ -122,7 +122,7 @@ function tile(region, size_in_degrees) {
 }
 
 Map.centerObject(roi, 9);
-// Map.addLayer(tiles);
+Map.addLayer(tiles);
 
 
 
@@ -141,6 +141,7 @@ var addArea = function(feature) {
 var tiles = tiles.map(addArea);
 
 print("Tiles with area variable", tiles.limit(5));
+
 
 
 
