@@ -109,6 +109,9 @@ var tiles = tiles.difference(campsGeo, 1)
 
 Map.addLayer(tiles);
 
+tiles = ee.FeatureCollection(tiles)
+
+print(tiles);
 
 //////////////////////////////////////////////////////////////////////////////////
 //
