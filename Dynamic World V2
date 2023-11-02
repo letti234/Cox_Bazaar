@@ -244,14 +244,9 @@ var forest_16 = ee.Image(1)
       .where(lc_16.eq(7), 0) //Bare ground
       .where(lc_16.eq(8), 0); //Snow and ice
       
-Map.addLayer(forest_16, {
-  min: 0,
-  max: 1,
-  palette: ['white', 'green']
-}, "Reclassification");
-
-
-Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
+// Map.addLayer(forest_16, {min: 0, max: 1,palette: ['white', 'green']
+// }, "Reclassification");
+// Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
  
 
 // //////////////////////////////////////////////////////////////////////////////////
