@@ -21,9 +21,15 @@ var geometry =
 //////////////////////////////////////////////////////////////////////////////////
 
 
-//Cox Bazar shapefile
-var roi = ee.FeatureCollection("FAO/GAUL/2015/level2").
+//Cox Bazar shapefile ADD NAIKHONGCHARI
+var CB= ee.FeatureCollection("FAO/GAUL/2015/level2").
 filter(ee.Filter.eq("ADM2_NAME", "Cox's Bazar"));
+
+var Nai = ee.FeatureCollection("users/salem043/Bangladesh/BGD_ADM3")
+.filter(ee.Filter.eq("shapeName", "Naikhongchari"));
+print(Nai);
+
+Map.addLayer(Nai);
 
 //LULC classifications subset to ROI
 var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
@@ -36,6 +42,22 @@ Map.addLayer(camps);
 
 //Protected areas
 
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Remove areas of ROI within refugee camps
+//
+//////////////////////////////////////////////////////////////////////////////////
+
+//Need to transform tiles into a feature
+// var tiles = tiles.geometry();
+// var tiles = tiles.difference(camps, 1);
+
+// Map.addLayer(tiles);
+
+// print(tiles);
+
 //////////////////////////////////////////////////////////////////////////////////
 //
 // Define sample grid-cells
@@ -43,292 +65,278 @@ Map.addLayer(camps);
 //////////////////////////////////////////////////////////////////////////////////
 
 
-var tiles = tile(roi, 0.1); //TURN BACK TO 0.01 deg!
+// var tiles = tile(roi, 0.1); //TURN BACK TO 0.01 deg!
 
-function tile(region, size_in_degrees) {
-  function tile_geometry(geometry) {
-    var coords = ee.List(geometry.bounds().coordinates().get(0))
-    var min_point = ee.List(coords.get(0))
-    var max_point = ee.List(coords.get(2))
+// function tile(region, size_in_degrees) {
+//   function tile_geometry(geometry) {
+//     var coords = ee.List(geometry.bounds().coordinates().get(0))
+//     var min_point = ee.List(coords.get(0))
+//     var max_point = ee.List(coords.get(2))
   
-    function sequence(direction) {
-      var start = min_point.get(direction)  
-      var stop = ee.Number(max_point.get(direction))
-      return ee.List.sequence(start, stop, size_in_degrees)
-    }
+//     function sequence(direction) {
+//       var start = min_point.get(direction)  
+//       var stop = ee.Number(max_point.get(direction))
+//       return ee.List.sequence(start, stop, size_in_degrees)
+//     }
   
-    var tiles = sequence(0).map(function (x) {
-      return sequence(1).map(function (y) { 
-          return ee.Feature(ee.Geometry.Rectangle([
-            [ee.Number(x), ee.Number(y)],
-            [
-              ee.Number(x).add(size_in_degrees).min(max_point.get(0)),
-              ee.Number(y).add(size_in_degrees).min(max_point.get(1))
-            ]
-        ]).intersection(geometry, 30))
-      })
-  	}).flatten()
-    return ee.FeatureCollection(tiles).filterBounds(geometry)
-  }
+//     var tiles = sequence(0).map(function (x) {
+//       return sequence(1).map(function (y) { 
+//           return ee.Feature(ee.Geometry.Rectangle([
+//             [ee.Number(x), ee.Number(y)],
+//             [
+//               ee.Number(x).add(size_in_degrees).min(max_point.get(0)),
+//               ee.Number(y).add(size_in_degrees).min(max_point.get(1))
+//             ]
+//         ]).intersection(geometry, 30))
+//       })
+//   	}).flatten()
+//     return ee.FeatureCollection(tiles).filterBounds(geometry)
+//   }
 
-  function tile_feature_collection(feature_collection) {
-    return ee.FeatureCollection(
-      feature_collection.iterate(
-        function (feature, acc) {
-          return ee.FeatureCollection(acc).merge(tile_geometry(ee.Feature(feature).geometry()))
-        }, ee.FeatureCollection([]))
-    )
-  }
+//   function tile_feature_collection(feature_collection) {
+//     return ee.FeatureCollection(
+//       feature_collection.iterate(
+//         function (feature, acc) {
+//           return ee.FeatureCollection(acc).merge(tile_geometry(ee.Feature(feature).geometry()))
+//         }, ee.FeatureCollection([]))
+//     )
+//   }
 
-  if (region instanceof ee.FeatureCollection)
-    return tile_feature_collection(region)
-  else if (region instanceof ee.Feature)
-    return tile_geometry(region.geometry())
-  else if (region instanceof ee.Geometry)
-    return tile_geometry(region)
-  else
-    throw Error(
-      'region must be ee.FeatureCollection, ee.Feature, or ee.Geometry. Was ' + region
-    )
-}
+//   if (region instanceof ee.FeatureCollection)
+//     return tile_feature_collection(region)
+//   else if (region instanceof ee.Feature)
+//     return tile_geometry(region.geometry())
+//   else if (region instanceof ee.Geometry)
+//     return tile_geometry(region)
+//   else
+//     throw Error(
+//       'region must be ee.FeatureCollection, ee.Feature, or ee.Geometry. Was ' + region
+//     )
+// }
 
-Map.centerObject(roi, 9);
-// Map.addLayer(tiles);
-
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Remove tiles within refugee camps
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-var tiles = tiles.geometry()
-var campsGeo = camps.geometry()
-var tiles = tiles.difference(campsGeo, 1)
-
-Map.addLayer(tiles);
-
-var tiles2 = ee.FeatureCollection(tiles);
-
-print(tiles2);
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Calculate area of each tile
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
-// var addArea = function(feature) {
-//   return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
-// };
-
-// // Map the area getting function over the FeatureCollection.
-// var tiles = tiles.map(addArea);
-
-// print("Tiles with area variable", tiles.limit(5));
+// Map.centerObject(roi, 9);
+// // Map.addLayer(tiles);
 
 
 
-// ////////////////////////////////////////////////////////////////////////////////
-
-// // Examine dates of data in Dynamic World
-
-// ////////////////////////////////////////////////////////////////////////////////
-
-// var distinctYears = lulc.distinct('system:time_start').aggregate_array('system:time_start');
-
-// // Convert each distinct year to a human-readable date
-// var humanReadableDates = distinctYears.map(function(time) {
-//   var date = ee.Date(time);
-//   return date.format("YYYY-MM-dd HH:mm:ss");
-// });
-
-// // Print the list of human-readable dates
-// print('Distinct years in human-readable format:', humanReadableDates);
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Determine dry season (Jan-Feb) composites for zonal statistics
-//
-//////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Calculate area of each tile
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
-//Jan 2016-Feb 2016
-var lc_16 = lulc
-  .filterDate("2016-01-01", "2016-02-28")
-.reduce(ee.Reducer.mode());
+// // var addArea = function(feature) {
+// //   return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
+// // };
+
+// // // Map the area getting function over the FeatureCollection.
+// // var tiles = tiles.map(addArea);
+
+// // print("Tiles with area variable", tiles.limit(5));
+
+
+
+// // ////////////////////////////////////////////////////////////////////////////////
+
+// // // Examine dates of data in Dynamic World
+
+// // ////////////////////////////////////////////////////////////////////////////////
+
+// // var distinctYears = lulc.distinct('system:time_start').aggregate_array('system:time_start');
+
+// // // Convert each distinct year to a human-readable date
+// // var humanReadableDates = distinctYears.map(function(time) {
+// //   var date = ee.Date(time);
+// //   return date.format("YYYY-MM-dd HH:mm:ss");
+// // });
+
+// // // Print the list of human-readable dates
+// // print('Distinct years in human-readable format:', humanReadableDates);
+
+
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Determine dry season (Jan-Feb) composites for zonal statistics
+// //
+// //////////////////////////////////////////////////////////////////////////////////
+
+
+// //Jan 2016-Feb 2016
+// var lc_16 = lulc
+//   .filterDate("2016-01-01", "2016-02-28")
+// .reduce(ee.Reducer.mode());
 
  
-//Jan 2017 to Feb 2017
-var lc_17 = lulc
-  .filterDate("2017-01-01", "2017-02-28")
-.reduce(ee.Reducer.mode());
+// //Jan 2017 to Feb 2017
+// var lc_17 = lulc
+//   .filterDate("2017-01-01", "2017-02-28")
+// .reduce(ee.Reducer.mode());
  
 
-//Jan 2018 to Feb 2018
-var lc_18 = lulc
-  .filterDate("2018-01-01", "2018-02-28")
-.reduce(ee.Reducer.mode());
+// //Jan 2018 to Feb 2018
+// var lc_18 = lulc
+//   .filterDate("2018-01-01", "2018-02-28")
+// .reduce(ee.Reducer.mode());
  
-//Jan 2019 to Feb 2019
-var lc_19 = lulc
-  .filterDate("2019-01-01", "2019-02-28")
-.reduce(ee.Reducer.mode());
- 
- 
-//Jan 2019 to Feb 2019
-var lc_19 = lulc
-  .filterDate("2019-01-01", "2019-02-28")
-.reduce(ee.Reducer.mode());
-
-//Jan 2020 to Feb 2020
-var lc_20 = lulc
-  .filterDate("2020-01-01", "2020-02-28")
-.reduce(ee.Reducer.mode());
- 
-//Jan 2021 to Feb 2021
-var lc_21 = lulc
-  .filterDate("2021-01-01", "2021-02-28")
-.reduce(ee.Reducer.mode());
+// //Jan 2019 to Feb 2019
+// var lc_19 = lulc
+//   .filterDate("2019-01-01", "2019-02-28")
+// .reduce(ee.Reducer.mode());
  
  
-//Jan 2022 to Feb 2022
-var lc_22 = lulc
-  .filterDate("2022-01-01", "2022-07-28")
-.reduce(ee.Reducer.mode());
+// //Jan 2019 to Feb 2019
+// var lc_19 = lulc
+//   .filterDate("2019-01-01", "2019-02-28")
+// .reduce(ee.Reducer.mode());
+
+// //Jan 2020 to Feb 2020
+// var lc_20 = lulc
+//   .filterDate("2020-01-01", "2020-02-28")
+// .reduce(ee.Reducer.mode());
+ 
+// //Jan 2021 to Feb 2021
+// var lc_21 = lulc
+//   .filterDate("2021-01-01", "2021-02-28")
+// .reduce(ee.Reducer.mode());
+ 
+ 
+// //Jan 2022 to Feb 2022
+// var lc_22 = lulc
+//   .filterDate("2022-01-01", "2022-07-28")
+// .reduce(ee.Reducer.mode());
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map winter season composites
-//
-//////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map winter season composites
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
-// var dwVisParams = {
-//   min: 0, max:8,
-//   palette: ['#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635', '#dfc35a', '#c4281b', '#a59b8f', '	#b39fe1']
-// };
+// // var dwVisParams = {
+// //   min: 0, max:8,
+// //   palette: ['#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635', '#dfc35a', '#c4281b', '#a59b8f', '	#b39fe1']
+// // };
 
-// Map.centerObject(roi);
+// // Map.centerObject(roi);
 
-// //Map LULC
-// Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
-// Map.addLayer(lc_17, dwVisParams, 'Land cover 2017');
-// Map.addLayer(lc_18, dwVisParams, 'Land cover 2018');
-// Map.addLayer(lc_19, dwVisParams, 'Land cover 2019');
-// Map.addLayer(lc_20, dwVisParams, 'Land cover 2020');
-// Map.addLayer(lc_21, dwVisParams, 'Land cover 2021');
-// Map.addLayer(lc_22, dwVisParams, 'Land cover 2022');
-
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent forest cover
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent grasslands cover
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent flooded vegetative cover
-//
-//////////////////////////////////////////////////////////////////////////////////
+// // //Map LULC
+// // Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
+// // Map.addLayer(lc_17, dwVisParams, 'Land cover 2017');
+// // Map.addLayer(lc_18, dwVisParams, 'Land cover 2018');
+// // Map.addLayer(lc_19, dwVisParams, 'Land cover 2019');
+// // Map.addLayer(lc_20, dwVisParams, 'Land cover 2020');
+// // Map.addLayer(lc_21, dwVisParams, 'Land cover 2021');
+// // Map.addLayer(lc_22, dwVisParams, 'Land cover 2022');
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent agricultural cover
-//
-//////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent forest cover
+// //
+// //////////////////////////////////////////////////////////////////////////////////
+
+
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent grasslands cover
+// //
+// //////////////////////////////////////////////////////////////////////////////////
+
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent flooded vegetative cover
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent shrub/scrub cover
-//
-//////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent agricultural cover
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent built area
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent bare ground
-//
-//////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Map zonal statistics: percent tile in protected area
-//
-//////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent shrub/scrub cover
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Gridcell Euclidean distance to nearest boundary of each of 7 camp areas
-//
-//////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent built area
+// //
+// //////////////////////////////////////////////////////////////////////////////////
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent bare ground
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
 
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Gridcell Euclidean distance to nearest camp boundary
-//
-//////////////////////////////////////////////////////////////////////////////////
-
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Map zonal statistics: percent tile in protected area
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
 
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Define larger tile for standard error clustering and assign tile ID
-//
-//////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Gridcell Euclidean distance to nearest boundary of each of 7 camp areas
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
 
 
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Gridcell Euclidean distance to nearest camp boundary
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Find intersection of tile centroid with larger tile and obtain ID
-//
-//////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Define larger tile for standard error clustering and assign tile ID
+// //
+// //////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+// //////////////////////////////////////////////////////////////////////////////////
+// //
+// // Find intersection of tile centroid with larger tile and obtain ID
+// //
+// //////////////////////////////////////////////////////////////////////////////////
 
 
 
