@@ -227,11 +227,11 @@ Map.centerObject(roi);
 
 
 
-// //////////////////////////////////////////////////////////////////////////////////
-// //
-// // Map zonal statistics: defining reclassification function
-// //
-// //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Map zonal statistics: defining reclassification function
+//
+//////////////////////////////////////////////////////////////////////////////////
 
 // Define a reclassification function
 var reclassifyImage = function(image, reclassRules) {
@@ -243,6 +243,13 @@ var reclassifyImage = function(image, reclassRules) {
   }
   return reclassified;
 };
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Reclassify to get binary forest maps
+//
+//////////////////////////////////////////////////////////////////////////////////
+
 
 // Define your reclassification rules as an object
 var reclassRules = {
@@ -257,19 +264,29 @@ var reclassRules = {
   'Snow and Ice': [8, 0]
 };
 
-// Example usage
-var reclassifiedImage = reclassifyImage(lc_16, reclassRules);
+// Reclassify every data year into a forest binary
+var forest_16 = reclassifyImage(lc_16, reclassRules);
+var forest_17 = reclassifyImage(lc_17, reclassRules);
+var forest_18 = reclassifyImage(lc_18, reclassRules);
+var forest_19 = reclassifyImage(lc_19, reclassRules);
+var forest_20 = reclassifyImage(lc_20, reclassRules);
+var forest_21 = reclassifyImage(lc_21, reclassRules);
+var forest_22 = reclassifyImage(lc_22, reclassRules);
 
-// Print the reclassified image to verify the changes.
-print(reclassifiedImage);
 
-// Define a custom color palette for visualization
-var customPalette = ['white', 'green'];
+// // Define a custom color palette for visualization
+// var customPalette = ['white', 'green'];
+// // Visualize the reclassified image using the custom palette
+// Map.addLayer(forest_16, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2016');
+// Map.addLayer(forest_17, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2017');
+// Map.addLayer(forest_18, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2018');
+// Map.addLayer(forest_19, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2019');
+// Map.addLayer(forest_20, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2020');
+// Map.addLayer(forest_21, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2021');
+// Map.addLayer(forest_22, {min: 0, max: 1, palette: customPalette}, 'Reclassified forest 2022');
 
-// Visualize the reclassified image using the custom palette
-Map.addLayer(reclassifiedImage, {min: 0, max: 1, palette: customPalette}, 'Reclassified Image');
 
-print(reclassifiedImage);
+
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
