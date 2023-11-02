@@ -23,10 +23,10 @@ var geometry =
 
 //Cox Bazar shapefile ADD NAIKHONGCHARI
 var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila");
-Map.addLayer(roi);
+// Map.addLayer(roi);
 
 var roiGeo = roi.union().geometry();
-Map.addLayer(roiGeo);
+// Map.addLayer(roiGeo);
 
 //LULC classifications subset to ROI
 var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
@@ -35,11 +35,11 @@ var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
 
 //Refugee camps
 var camps = ee.FeatureCollection("users/salem043/Bangladesh/Cox_Bazar_Simple_Borders");
-Map.addLayer(camps);
+// Map.addLayer(camps);
 
 //Protected areas
-
-
+var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BGD");
+// Map.addLayer(protect);
 
 //////////////////////////////////////////////////////////////////////////////////
 //
@@ -47,13 +47,12 @@ Map.addLayer(camps);
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-//Need to transform tiles into a feature
-// var tiles = tiles.geometry();
-// var tiles = tiles.difference(camps, 1);
 
-// Map.addLayer(tiles);
+var roiGeo = roiGeo.difference(camps, 1);
 
-// print(tiles);
+// Map.addLayer(roiGeo);
+
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //
@@ -62,148 +61,146 @@ Map.addLayer(camps);
 //////////////////////////////////////////////////////////////////////////////////
 
 
-// var tiles = tile(roi, 0.1); //TURN BACK TO 0.01 deg!
+var tiles = tile(roiGeo, 0.1); //TURN BACK TO 0.01 deg (or lower)
 
-// function tile(region, size_in_degrees) {
-//   function tile_geometry(geometry) {
-//     var coords = ee.List(geometry.bounds().coordinates().get(0))
-//     var min_point = ee.List(coords.get(0))
-//     var max_point = ee.List(coords.get(2))
+function tile(region, size_in_degrees) {
+  function tile_geometry(geometry) {
+    var coords = ee.List(geometry.bounds().coordinates().get(0))
+    var min_point = ee.List(coords.get(0))
+    var max_point = ee.List(coords.get(2))
   
-//     function sequence(direction) {
-//       var start = min_point.get(direction)  
-//       var stop = ee.Number(max_point.get(direction))
-//       return ee.List.sequence(start, stop, size_in_degrees)
-//     }
+    function sequence(direction) {
+      var start = min_point.get(direction)  
+      var stop = ee.Number(max_point.get(direction))
+      return ee.List.sequence(start, stop, size_in_degrees)
+    }
   
-//     var tiles = sequence(0).map(function (x) {
-//       return sequence(1).map(function (y) { 
-//           return ee.Feature(ee.Geometry.Rectangle([
-//             [ee.Number(x), ee.Number(y)],
-//             [
-//               ee.Number(x).add(size_in_degrees).min(max_point.get(0)),
-//               ee.Number(y).add(size_in_degrees).min(max_point.get(1))
-//             ]
-//         ]).intersection(geometry, 30))
-//       })
-//   	}).flatten()
-//     return ee.FeatureCollection(tiles).filterBounds(geometry)
-//   }
+    var tiles = sequence(0).map(function (x) {
+      return sequence(1).map(function (y) { 
+          return ee.Feature(ee.Geometry.Rectangle([
+            [ee.Number(x), ee.Number(y)],
+            [
+              ee.Number(x).add(size_in_degrees).min(max_point.get(0)),
+              ee.Number(y).add(size_in_degrees).min(max_point.get(1))
+            ]
+        ]).intersection(geometry, 30))
+      })
+  	}).flatten()
+    return ee.FeatureCollection(tiles).filterBounds(geometry)
+  }
 
-//   function tile_feature_collection(feature_collection) {
-//     return ee.FeatureCollection(
-//       feature_collection.iterate(
-//         function (feature, acc) {
-//           return ee.FeatureCollection(acc).merge(tile_geometry(ee.Feature(feature).geometry()))
-//         }, ee.FeatureCollection([]))
-//     )
-//   }
+  function tile_feature_collection(feature_collection) {
+    return ee.FeatureCollection(
+      feature_collection.iterate(
+        function (feature, acc) {
+          return ee.FeatureCollection(acc).merge(tile_geometry(ee.Feature(feature).geometry()))
+        }, ee.FeatureCollection([]))
+    )
+  }
 
-//   if (region instanceof ee.FeatureCollection)
-//     return tile_feature_collection(region)
-//   else if (region instanceof ee.Feature)
-//     return tile_geometry(region.geometry())
-//   else if (region instanceof ee.Geometry)
-//     return tile_geometry(region)
-//   else
-//     throw Error(
-//       'region must be ee.FeatureCollection, ee.Feature, or ee.Geometry. Was ' + region
-//     )
-// }
+  if (region instanceof ee.FeatureCollection)
+    return tile_feature_collection(region)
+  else if (region instanceof ee.Feature)
+    return tile_geometry(region.geometry())
+  else if (region instanceof ee.Geometry)
+    return tile_geometry(region)
+  else
+    throw Error(
+      'region must be ee.FeatureCollection, ee.Feature, or ee.Geometry. Was ' + region
+    )
+}
 
-// Map.centerObject(roi, 9);
-// // Map.addLayer(tiles);
-
-
+Map.centerObject(roi, 9);
+Map.addLayer(tiles);
 
 
 
-// //////////////////////////////////////////////////////////////////////////////////
-// //
-// // Calculate area of each tile
-// //
-// //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Calculate area of each tile
+//
+//////////////////////////////////////////////////////////////////////////////////
 
 
-// // var addArea = function(feature) {
-// //   return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
-// // };
+var addArea = function(feature) {
+  return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
+};
 
-// // // Map the area getting function over the FeatureCollection.
-// // var tiles = tiles.map(addArea);
+// Map the area getting function over the FeatureCollection.
+var tiles = tiles.map(addArea);
 
-// // print("Tiles with area variable", tiles.limit(5));
-
-
-
-// // ////////////////////////////////////////////////////////////////////////////////
-
-// // // Examine dates of data in Dynamic World
-
-// // ////////////////////////////////////////////////////////////////////////////////
-
-// // var distinctYears = lulc.distinct('system:time_start').aggregate_array('system:time_start');
-
-// // // Convert each distinct year to a human-readable date
-// // var humanReadableDates = distinctYears.map(function(time) {
-// //   var date = ee.Date(time);
-// //   return date.format("YYYY-MM-dd HH:mm:ss");
-// // });
-
-// // // Print the list of human-readable dates
-// // print('Distinct years in human-readable format:', humanReadableDates);
+print("Tiles with area variable", tiles.limit(5));
 
 
-// //////////////////////////////////////////////////////////////////////////////////
-// //
-// // Determine dry season (Jan-Feb) composites for zonal statistics
-// //
-// //////////////////////////////////////////////////////////////////////////////////
+
+// ////////////////////////////////////////////////////////////////////////////////
+
+// // Examine dates of data in Dynamic World
+
+// ////////////////////////////////////////////////////////////////////////////////
+
+// var distinctYears = lulc.distinct('system:time_start').aggregate_array('system:time_start');
+
+// // Convert each distinct year to a human-readable date
+// var humanReadableDates = distinctYears.map(function(time) {
+//   var date = ee.Date(time);
+//   return date.format("YYYY-MM-dd HH:mm:ss");
+// });
+
+// // Print the list of human-readable dates
+// print('Distinct years in human-readable format:', humanReadableDates);
 
 
-// //Jan 2016-Feb 2016
-// var lc_16 = lulc
-//   .filterDate("2016-01-01", "2016-02-28")
-// .reduce(ee.Reducer.mode());
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Determine dry season (Jan-Feb) composites for zonal statistics
+//
+//////////////////////////////////////////////////////////////////////////////////
+
+
+//Jan 2016-Feb 2016
+var lc_16 = lulc
+  .filterDate("2016-01-01", "2016-02-28")
+.reduce(ee.Reducer.mode());
 
  
-// //Jan 2017 to Feb 2017
-// var lc_17 = lulc
-//   .filterDate("2017-01-01", "2017-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2017 to Feb 2017
+var lc_17 = lulc
+  .filterDate("2017-01-01", "2017-02-28")
+.reduce(ee.Reducer.mode());
  
 
-// //Jan 2018 to Feb 2018
-// var lc_18 = lulc
-//   .filterDate("2018-01-01", "2018-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2018 to Feb 2018
+var lc_18 = lulc
+  .filterDate("2018-01-01", "2018-02-28")
+.reduce(ee.Reducer.mode());
  
-// //Jan 2019 to Feb 2019
-// var lc_19 = lulc
-//   .filterDate("2019-01-01", "2019-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2019 to Feb 2019
+var lc_19 = lulc
+  .filterDate("2019-01-01", "2019-02-28")
+.reduce(ee.Reducer.mode());
  
  
-// //Jan 2019 to Feb 2019
-// var lc_19 = lulc
-//   .filterDate("2019-01-01", "2019-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2019 to Feb 2019
+var lc_19 = lulc
+  .filterDate("2019-01-01", "2019-02-28")
+.reduce(ee.Reducer.mode());
 
-// //Jan 2020 to Feb 2020
-// var lc_20 = lulc
-//   .filterDate("2020-01-01", "2020-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2020 to Feb 2020
+var lc_20 = lulc
+  .filterDate("2020-01-01", "2020-02-28")
+.reduce(ee.Reducer.mode());
  
-// //Jan 2021 to Feb 2021
-// var lc_21 = lulc
-//   .filterDate("2021-01-01", "2021-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2021 to Feb 2021
+var lc_21 = lulc
+  .filterDate("2021-01-01", "2021-02-28")
+.reduce(ee.Reducer.mode());
  
  
-// //Jan 2022 to Feb 2022
-// var lc_22 = lulc
-//   .filterDate("2022-01-01", "2022-07-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2022 to Feb 2022
+var lc_22 = lulc
+  .filterDate("2022-01-01", "2022-07-28")
+.reduce(ee.Reducer.mode());
 
 
 // //////////////////////////////////////////////////////////////////////////////////
