@@ -209,12 +209,12 @@ var lc_22 = lulc
 // //
 // //////////////////////////////////////////////////////////////////////////////////
 
-// // var dwVisParams = {
-// //   min: 0, max:8,
-// //   palette: ['#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635', '#dfc35a', '#c4281b', '#a59b8f', '	#b39fe1']
-// // };
+var dwVisParams = {
+  min: 0, max:8,
+  palette: ['#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635', '#dfc35a', '#c4281b', '#a59b8f', '	#b39fe1']
+};
 
-// // Map.centerObject(roi);
+Map.centerObject(roi);
 
 // // //Map LULC
 // // Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
@@ -233,6 +233,26 @@ var lc_22 = lulc
 // //
 // //////////////////////////////////////////////////////////////////////////////////
 
+var forest_16 = ee.Image(1)
+      .where(lc_16.eq(0), 0) //Water
+      .where(lc_16.eq(1), 1) //Trees
+      .where(lc_16.eq(2), 0) //Grasslands
+      .where(lc_16.eq(3), 0) //Flooded veg
+      .where(lc_16.eq(4), 0) //Crops
+      .where(lc_16.eq(5), 0) //Shrubland/scrubland
+      .where(lc_16.eq(6), 0) //Built area
+      .where(lc_16.eq(7), 0) //Bare ground
+      .where(lc_16.eq(8), 0); //Snow and ice
+      
+Map.addLayer(forest_16, {
+  min: 0,
+  max: 1,
+  palette: ['white', 'green']
+}, "Reclassification");
+
+
+Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
+ 
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
