@@ -139,7 +139,7 @@ Map.centerObject(roi, 9);
 
 
 var addArea = function(feature) {
-  return feature.set({areaMeasure: feature.geometry().area()});
+  return feature.set({areaMeters: feature.geometry().area()});
 };
 
 // Map the area getting function over the FeatureCollection.
