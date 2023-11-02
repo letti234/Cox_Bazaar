@@ -109,9 +109,9 @@ var tiles = tiles.difference(campsGeo, 1)
 
 Map.addLayer(tiles);
 
-tiles = ee.FeatureCollection(tiles)
+var tiles2 = ee.FeatureCollection(tiles);
 
-print(tiles);
+print(tiles2);
 
 //////////////////////////////////////////////////////////////////////////////////
 //
@@ -120,14 +120,14 @@ print(tiles);
 //////////////////////////////////////////////////////////////////////////////////
 
 
-var addArea = function(feature) {
-  return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
-};
+// var addArea = function(feature) {
+//   return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
+// };
 
-// Map the area getting function over the FeatureCollection.
-var tiles = tiles.map(addArea);
+// // Map the area getting function over the FeatureCollection.
+// var tiles = tiles.map(addArea);
 
-print("Tiles with area variable", tiles.limit(5));
+// print("Tiles with area variable", tiles.limit(5));
 
 
 
