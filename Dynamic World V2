@@ -14,8 +14,12 @@ var geometry =
           [92.51346343694321, 22.067618064973296]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
  
-//Call on data
 //////////////////////////////////////////////////////////////////////////////////
+//
+//Call on data
+//
+//////////////////////////////////////////////////////////////////////////////////
+
 
 //Cox Bazar shapefile
 var roi = ee.FeatureCollection("FAO/GAUL/2015/level2").
@@ -29,10 +33,16 @@ var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
 //Refugee camps
 
 
-//Create sample grid-cells (1.1 km by 1.1 km)
+//Protected areas
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Define Sample grid-cells
+//
 //////////////////////////////////////////////////////////////////////////////////
 
-var tiles = tile(roi, 0.01); //TURN BACK TO 0.01 deg!
+
+var tiles = tile(roi, 0.1); //TURN BACK TO 0.01 deg!
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
@@ -82,14 +92,26 @@ function tile(region, size_in_degrees) {
 }
 
 Map.centerObject(roi, 9);
-Map.addLayer(tiles);
-
-//Assign gridcell ID
-/////////////////////////////////////////////////////////////////////////////////
+// Map.addLayer(tiles);
 
 
+//////////////////////////////////////////////////////////////////////////////////
+//
+// Area of each tile
+//
+//////////////////////////////////////////////////////////////////////////////////
 
-//Remove grid-cells within the refugee camps
+
+var addArea = function(feature) {
+  return feature.set({areaHa: feature.geometry().area().divide(100 * 100)});
+};
+
+// Map the area getting function over the FeatureCollection.
+var tiles = tiles.map(addArea);
+
+print("Tiles with area variable", tiles.limit(5));
+
+//Remove tiles within the refugee camps
 /////////////////////////////////////////////////////////////////////////////////
 
 
@@ -107,55 +129,59 @@ Map.addLayer(tiles);
 // // Print the list of human-readable dates
 // print('Distinct years in human-readable format:', humanReadableDates);
 
-
+// //////////////////////////////////////////////////////////////////////////////////
+// //
 // //Winter season composites for zonal statistics
+// //
 // //////////////////////////////////////////////////////////////////////////////////
 
 
-// //Jan 2016-Feb 2016
-// var lc_16 = lulc
-//   .filterDate("2016-01-01", "2016-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2016-Feb 2016
+var lc_16 = lulc
+  .filterDate("2016-01-01", "2016-02-28")
+.reduce(ee.Reducer.mode());
 
  
-// //Jan 2017 to Feb 2017
-// var lc_17 = lulc
-//   .filterDate("2017-01-01", "2017-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2017 to Feb 2017
+var lc_17 = lulc
+  .filterDate("2017-01-01", "2017-02-28")
+.reduce(ee.Reducer.mode());
  
 
-// //Jan 2018 to Feb 2018
-// var lc_18 = lulc
-//   .filterDate("2018-01-01", "2018-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2018 to Feb 2018
+var lc_18 = lulc
+  .filterDate("2018-01-01", "2018-02-28")
+.reduce(ee.Reducer.mode());
  
-// //Jan 2019 to Feb 2019
-// var lc_19 = lulc
-//   .filterDate("2019-01-01", "2019-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2019 to Feb 2019
+var lc_19 = lulc
+  .filterDate("2019-01-01", "2019-02-28")
+.reduce(ee.Reducer.mode());
  
  
-// //Jan 2019 to Feb 2019
-// var lc_19 = lulc
-//   .filterDate("2019-01-01", "2019-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2019 to Feb 2019
+var lc_19 = lulc
+  .filterDate("2019-01-01", "2019-02-28")
+.reduce(ee.Reducer.mode());
 
-// //Jan 2020 to Feb 2020
-// var lc_20 = lulc
-//   .filterDate("2020-01-01", "2020-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2020 to Feb 2020
+var lc_20 = lulc
+  .filterDate("2020-01-01", "2020-02-28")
+.reduce(ee.Reducer.mode());
  
-// //Jan 2021 to Feb 2021
-// var lc_21 = lulc
-//   .filterDate("2021-01-01", "2021-02-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2021 to Feb 2021
+var lc_21 = lulc
+  .filterDate("2021-01-01", "2021-02-28")
+.reduce(ee.Reducer.mode());
  
  
-// //Jan 2022 to Feb 2022
-// var lc_22 = lulc
-//   .filterDate("2022-01-01", "2022-07-28")
-// .reduce(ee.Reducer.mode());
+//Jan 2022 to Feb 2022
+var lc_22 = lulc
+  .filterDate("2022-01-01", "2022-07-28")
+.reduce(ee.Reducer.mode());
 
+
+// //////////////////////////////////////////////////////////////////////////////////
 // //Map winter season composites
 // //////////////////////////////////////////////////////////////////////////////////
 
