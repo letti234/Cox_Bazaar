@@ -229,30 +229,47 @@ Map.centerObject(roi);
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
-// // Map zonal statistics: percent forest cover
+// // Map zonal statistics: defining reclassification function
 // //
 // //////////////////////////////////////////////////////////////////////////////////
 
-// var forest_2016 = ee.Image(1)
-//       .where(lc_16.eq(0), 0) //Water
-//       .where(lc_16.eq(1), 1) //Trees
-//       .where(lc_16.eq(2), 0) //Grasslands
-//       .where(lc_16.eq(3), 0) //Flooded veg
-//       .where(lc_16.eq(4), 0) //Crops
-//       .where(lc_16.eq(5), 0) //Shrubland/scrubland
-//       .where(lc_16.eq(6), 0) //Built area
-//       .where(lc_16.eq(7), 0) //Bare ground
-//       .where(lc_16.eq(8), 0); //Snow and ice
-      
-// //Apply reducer to 2016 
-// var tiles = forest_2016.reduceRegions({
-//   collection: tiles,
-//   reducer: ee.Reducer.mean().setOutputs(["forest_2016"]),
-//   scale: 10, 
-// });
+// Define a reclassification function
+var reclassifyImage = function(image, reclassRules) {
+  var reclassified = image;
+  for (var rule in reclassRules) {
+    var classValue = reclassRules[rule][0]; // Original class value
+    var newValue = reclassRules[rule][1]; // New class value
+    reclassified = reclassified.where(image.eq(classValue), newValue);
+  }
+  return reclassified;
+};
 
+// Define your reclassification rules as an object
+var reclassRules = {
+  'Water': [0, 0],
+  'Trees': [1, 1],
+  'Grasslands': [2, 0],
+  'Flooded Vegetation': [3, 0],
+  'Crops': [4, 0],
+  'Shrubland/Scrubland': [5, 0],
+  'Built Area': [6, 0],
+  'Bare Ground': [7, 0],
+  'Snow and Ice': [8, 0]
+};
 
+// Example usage
+var reclassifiedImage = reclassifyImage(lc_16, reclassRules);
 
+// Print the reclassified image to verify the changes.
+print(reclassifiedImage);
+
+// Define a custom color palette for visualization
+var customPalette = ['white', 'green'];
+
+// Visualize the reclassified image using the custom palette
+Map.addLayer(reclassifiedImage, {min: 0, max: 1, palette: customPalette}, 'Reclassified Image');
+
+print(reclassifiedImage);
 
 // //////////////////////////////////////////////////////////////////////////////////
 // //
