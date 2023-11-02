@@ -524,8 +524,6 @@ var tiles = dta_2022.reduceRegions({
 });
 
 
-print(tiles.limit(2));
-
 // //////////////////////////////////////////////////////////////////////////////////
 // //
 // // Map zonal statistics: percent agricultural cover
