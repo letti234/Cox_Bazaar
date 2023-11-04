@@ -34,7 +34,7 @@ var geometry =
 
 //Cox Bazar shapefile ADD NAIKHONGCHARI
 var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila");
-// Map.addLayer(roi);
+ Map.addLayer(roi);
 
 var roiGeo = roi.union().geometry();
 // Map.addLayer(roiGeo);
