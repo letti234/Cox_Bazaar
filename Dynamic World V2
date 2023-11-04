@@ -908,7 +908,6 @@ var tiles = dta_2022.reduceRegions({
 
 print(tiles.limit(1), "Tiles with all LULC zonal stats");
 
-
 //Export this object which I can likely work with in R.
 
 
