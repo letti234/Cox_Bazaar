@@ -1,0 +1,248 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[91.73623657760608, 21.919946680930916],
+          [91.73623657760608, 20.599195189935884],
+          [92.63711548385608, 20.599195189935884],
+          [92.63711548385608, 21.919946680930916]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//Cox Bazar Land Use Change study
+//Colette Salemi
+//June 13th 2023
+
+//Code exports MODIS geotiffs of pct forest, nonforest, nonveg cover and quality bands
+
+Map.centerObject(geometry, 8);
+
+
+//MODIS data 2010-2022 clipped to the study area
+
+var data = ee.ImageCollection('MODIS/006/MOD44B').filter(ee.Filter.date('2000-01-01', '2022-12-31'))
+.map(function(image){return image.clip(geometry)});
+
+print(data);
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Percent forest
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // Define the start and end years
+// var startYear = 2000;
+// var endYear = 2020;
+
+// // Create an empty ImageCollection to store the results
+// var resultCollection = ee.ImageCollection([]);
+
+// // Iterate over the years
+// for (var year = startYear; year <= endYear; year++) {
+//   // Create a date range for the current year
+//   var startDate = ee.Date.fromYMD(year, 1, 1);
+//   var endDate = ee.Date.fromYMD(year, 12, 31);
+
+//   // Filter the data for the current year
+//   var forYear = data.filter(ee.Filter.date(startDate, endDate));
+
+//   // Select the desired band for each image in the collection
+//   var selectedBand = forYear.select("Percent_Tree_Cover").toBands();
+
+//   // Add the selected band to the result collection
+//   resultCollection = resultCollection.merge(selectedBand);
+// }
+
+// // Print or do something with the result collection
+// print('Result Collection:', resultCollection);
+
+
+// for (var year = startYear; year <= endYear; year++) {
+//   // Calculate the index in the ImageCollection for the current year
+//   var index = year - startYear;
+
+//   // Select the image at the calculated index
+//   var currentImage = ee.Image(resultCollection.toList(resultCollection.size()).get(index));
+
+//   // Print or do something with the current image
+//   print('Current Image for year ' + year + ':', currentImage);
+
+//   // Export the current image to Google Drive
+//   var exportName = 'forest_image_' + year;
+//   Export.image.toDrive({
+//     image: currentImage,
+//     description: exportName,
+//     folder: 'CB_Export', // Specify your folder
+//     scale: 250 // Specify the scale
+//   });
+// }
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Percent nonforest
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // Define the start and end years
+// var startYear = 2000;
+// var endYear = 2020;
+
+// // Create an empty ImageCollection to store the results
+// var resultCollection = ee.ImageCollection([]);
+
+// // Iterate over the years
+// for (var year = startYear; year <= endYear; year++) {
+//   // Create a date range for the current year
+//   var startDate = ee.Date.fromYMD(year, 1, 1);
+//   var endDate = ee.Date.fromYMD(year, 12, 31);
+
+//   // Filter the data for the current year
+//   var forYear = data.filter(ee.Filter.date(startDate, endDate));
+
+//   // Select the desired band for each image in the collection
+//   var selectedBand = forYear.select("Percent_NonTree_Vegetation").toBands();
+
+//   // Add the selected band to the result collection
+//   resultCollection = resultCollection.merge(selectedBand);
+// }
+
+// // Print or do something with the result collection
+// print('Result Collection:', resultCollection);
+
+
+// for (var year = startYear; year <= endYear; year++) {
+//   // Calculate the index in the ImageCollection for the current year
+//   var index = year - startYear;
+
+//   // Select the image at the calculated index
+//   var currentImage = ee.Image(resultCollection.toList(resultCollection.size()).get(index));
+
+//   // Print or do something with the current image
+//   print('Current Image for year ' + year + ':', currentImage);
+
+//   // Export the current image to Google Drive
+//   var exportName = 'Veg_image_' + year;
+//   Export.image.toDrive({
+//     image: currentImage,
+//     description: exportName,
+//     folder: 'CB_Export', // Specify your folder
+//     scale: 250 // Specify the scale
+//   });
+// }
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Percent bare
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+// // Define the start and end years
+// var startYear = 2000;
+// var endYear = 2020;
+
+// // Create an empty ImageCollection to store the results
+// var resultCollection = ee.ImageCollection([]);
+
+// // Iterate over the years
+// for (var year = startYear; year <= endYear; year++) {
+//   // Create a date range for the current year
+//   var startDate = ee.Date.fromYMD(year, 1, 1);
+//   var endDate = ee.Date.fromYMD(year, 12, 31);
+
+//   // Filter the data for the current year
+//   var forYear = data.filter(ee.Filter.date(startDate, endDate));
+
+//   // Select the desired band for each image in the collection
+//   var selectedBand = forYear.select("Percent_NonVegetated").toBands();
+
+//   // Add the selected band to the result collection
+//   resultCollection = resultCollection.merge(selectedBand);
+// }
+
+// // Print or do something with the result collection
+// print('Result Collection:', resultCollection);
+
+
+// for (var year = startYear; year <= endYear; year++) {
+//   // Calculate the index in the ImageCollection for the current year
+//   var index = year - startYear;
+
+//   // Select the image at the calculated index
+//   var currentImage = ee.Image(resultCollection.toList(resultCollection.size()).get(index));
+
+//   // Print or do something with the current image
+//   print('Current Image for year ' + year + ':', currentImage);
+
+//   // Export the current image to Google Drive
+//   var exportName = 'Bare_image_' + year;
+//   Export.image.toDrive({
+//     image: currentImage,
+//     description: exportName,
+//     folder: 'CB_Export', // Specify your folder
+//     scale: 250 // Specify the scale
+//   });
+// }
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Quality indicator
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Define the start and end years
+var startYear = 2000;
+var endYear = 2020;
+
+// Function to extract bits from the quality band
+var bitwiseExtract = function(input, fromBit, toBit) {
+  var maskSize = ee.Number(1).add(toBit).subtract(fromBit);
+  var mask = ee.Number(1).leftShift(maskSize).subtract(1);
+  return input.rightShift(fromBit).bitwiseAnd(mask);
+};
+
+// Iterate over the years
+for (var year = startYear; year <= endYear; year++) {
+  // Create a date range for the current year
+  var startDate = ee.Date.fromYMD(year, 1, 1);
+  var endDate = ee.Date.fromYMD(year, 12, 31);
+
+  // Filter the data for the current year
+  var forYear = data.filter(ee.Filter.date(startDate, endDate));
+
+  // Select the quality band and transform it into bands
+  var qualityBand = forYear.select("Quality").toBands();
+
+  // Extract bits 0 to 7 and create a binary indicator for good or bad quality pixels
+  var qualMask = bitwiseExtract(qualityBand, 0, 7).lte(1);
+
+  // Print or do something with the qualMask for the current year
+  print('qualMask for year ' + year + ':', qualMask);
+
+  // Add the qualMask as a layer on the map
+  Map.addLayer(qualMask, {}, 'qualMask_' + year);
+
+  // Export the qualMask to Google Drive
+  var exportName = 'qualMask_' + year;
+  Export.image.toDrive({
+    image: qualMask,
+    description: exportName,
+    folder: 'CB_Export', // Specify your folder
+    scale: 250 // Specify the scale
+  });
+}
+
