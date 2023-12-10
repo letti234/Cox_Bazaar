@@ -1,0 +1,56 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[87.01876126377502, 26.936636546627387],
+          [87.01876126377502, 19.78207837731615],
+          [93.39083157627502, 19.78207837731615],
+          [93.39083157627502, 26.936636546627387]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+
+// get the 2015 image collection, we're using the "avg_rad" band
+var viirs = ee.ImageCollection("NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG")
+.select('avg_rad').map(function(image){return image.clip(CB)});
+
+print(viirs);
+
+var start = 2014;
+var end = 2020;
+
+var year = ee.List.sequence(start, end);
+
+
+function viirs_annual_median_reduce(year) {
+  var filteredCollection = ee.ImageCollection(viirs)
+    .filter(ee.Filter.calendarRange(year, year, 'year'))
+    .select('avg_rad');
+  
+  var medianImage = filteredCollection.median()
+    .set('year', year);
+  
+  return medianImage;
+}
+
+// Create an ImageCollection from the annual median estimates using the map function
+var yearComps = ee.ImageCollection.fromImages(year.map(viirs_annual_median_reduce));
+print(yearComps);
+
+var one = yearComps.first();
+var scale = one.select(['avg_rad']).projection().nominalScale();
+
+print(one);
+
+var batch = require('users/fitoprincipe/geetools:batch');
+
+
+
+batch.Download.ImageCollection.toDrive(yearComps, "Ethiopia_NDVI", {scale:100});
+
+
+  // ee.Number
