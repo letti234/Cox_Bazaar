@@ -1,0 +1,7 @@
+//OSM data for encampment areas
+
+var roads = ee.FeatureCollection("users/salem043/Bangladesh/Camp_roads_and_paths");
+
+Map.centerObject(roads, 15);
+
+Map.addLayer(roads);
