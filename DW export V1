@@ -14,7 +14,10 @@ var geometry =
           [92.51346343694321, 22.067618064973296]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
+//////////////////////////////////////////////////////////////////////////////////
+//
 //Call on data
+//
 //////////////////////////////////////////////////////////////////////////////////
 
 //Cox Bazar shapefile
@@ -25,7 +28,8 @@ var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila")
 var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
  .map(function(image){return image.clip(geometry)})
  .select("label");
- 
+
+//Protected areas
 var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BGD");
 
 //Refugee camps
@@ -33,9 +37,11 @@ var camps = ee.FeatureCollection("users/salem043/Bangladesh/Cox_Bazar_Simple_Bor
 Map.addLayer(camps, {}, "Refugee camps", 0);
 
 
-//Winter season composites
 //////////////////////////////////////////////////////////////////////////////////
-
+//
+//Generate, map and export modal composites (Jan and Feb)
+//
+//////////////////////////////////////////////////////////////////////////////////
 
 //Jan 2016-Feb 2016
 var lc_16 = lulc
@@ -194,7 +200,11 @@ Map.addLayer(lc_22, dwVisParams, 'Land cover 2022', 0);
 // print(lc_16, "Image");
 
 
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//
+//Vectorize a raster and generate a feature collection of centroids
+//
+//////////////////////////////////////////////////////////////////////////////////
 
 var grid = lc_16.reduceToVectors({
   geometryType: 'polygon',
@@ -219,7 +229,12 @@ var centroids = grid.map(function(feature) {
 // Inspect the result
 // print(centroids.limit(2), "Centroids of each gridcell");
 
-
+//////////////////////////////////////////////////////////////////////////////////
+//
+//Collect zonal statistics based on the intersection of each centroid and the 
+//other raster years
+//
+//////////////////////////////////////////////////////////////////////////////////
 
 var centroids = centroids.map(function(feature) {
   return feature.set(lc_17.reduceRegion({
@@ -287,6 +302,14 @@ var centroids = centroids.map(function(feature) {
 });
 
 
+//////////////////////////////////////////////////////////////////////////////////
+//
+//Reproject the protected area data so it is a binary raster. Determine whether
+//the grid-cell falls into a protected area
+//
+//////////////////////////////////////////////////////////////////////////////////
+
+
 protect = protect.map(function(feature) {
   return feature.set('protected', 1); // Add a property with value 1
 });
@@ -313,12 +336,17 @@ print(centroids.limit(2), "Centroid zonal stats with protected areas");
 //Map.addLayer(protectRaster, {min: 0, max: 1, palette: ['white', 'green']}, 'Protected Areas', 0);
 
 
-
+//////////////////////////////////////////////////////////////////////////////////
+//
+//Find the minimum distance between each sample grid-cell and the nearest camp
+//boundary
+//
+//////////////////////////////////////////////////////////////////////////////////
 
 
 
 var spatialFilter = ee.Filter.withinDistance({
-  distance: 80000000000,
+  distance: 800000,
   leftField: '.geo',
   rightField: '.geo',
   maxError: 10
@@ -335,9 +363,28 @@ var joined = ee.Join.saveAll({
   condition: spatialFilter
 });
 
-print(joined.limit(2));
+var withNearestDist = joined.map(function(f) {
+  var nearestDist = ee.Feature(ee.List(f.get('neighbors')).get(0))
+      .get('distance');
+  return f.set('nearestDist', nearestDist);
+});
 
+
+
+// Remove the 'neighbors' property from each feature in the collection
+var withNoNeighbors = withNearestDist.map(function(feature) {
+  return feature.select(['lc_16', 'lc_17', 'lc_18', 'lc_19', 'lc_20', 'lc_21', 'lc_22', 'lc_23', 'first', 'nearestDist']);
+});
+
+// Print the updated collection to check the result
+print('Updated FeatureCollection', withNoNeighbors.limit(2));
+
+//////////////////////////////////////////////////////////////////////////////////
+//
 //Export
+//
+//////////////////////////////////////////////////////////////////////////////////
 
-//Export SSA country as CSV
-Export.table.toDrive(centroids, "DW_Full_Sample_Centroids", "CB_EXPORT_DW");
+
+
+Export.table.toDrive(withNoNeighbors, "DW_Full_Sample_Centroids_V2", "CB_EXPORT_DW");
