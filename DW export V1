@@ -18,8 +18,8 @@ var geometry =
 //////////////////////////////////////////////////////////////////////////////////
 
 //Cox Bazar shapefile
-var roi = ee.FeatureCollection("FAO/GAUL/2015/level2").
-filter(ee.Filter.eq("ADM2_NAME", "Cox's Bazar"));
+var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila");
+
 
 //LULC classifications subset to ROI
 var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
@@ -41,44 +41,54 @@ var lc_16 = lulc
 //Jan 2017 to Feb 2017
 var lc_17 = lulc
   .filterDate("2017-01-01", "2017-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
- 
+
+var lc_17 = lc_17.select(['label_mode']).rename(['lc_17']);
+
 
 //Jan 2018 to Feb 2018
 var lc_18 = lulc
   .filterDate("2018-01-01", "2018-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
  
 //Jan 2019 to Feb 2019
 var lc_19 = lulc
   .filterDate("2019-01-01", "2019-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
  
  
 //Jan 2019 to Feb 2019
 var lc_19 = lulc
   .filterDate("2019-01-01", "2019-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
 
 //Jan 2020 to Feb 2020
 var lc_20 = lulc
   .filterDate("2020-01-01", "2020-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
  
 //Jan 2021 to Feb 2021
 var lc_21 = lulc
   .filterDate("2021-01-01", "2021-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
  
  
 //Jan 2022 to Feb 2022
 var lc_22 = lulc
   .filterDate("2022-01-01", "2022-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
  
  //Jan 2023 to Feb 2023
 var lc_23 = lulc
   .filterDate("2023-01-01", "2023-02-28")
+  .map(function(image){return image.clip(roi)})
  .reduce(ee.Reducer.mode());
 
 
@@ -90,95 +100,136 @@ var dwVisParams = {
 Map.centerObject(roi);
 
 //Map LULC
-Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
-Map.addLayer(lc_17, dwVisParams, 'Land cover 2017');
-Map.addLayer(lc_18, dwVisParams, 'Land cover 2018');
-Map.addLayer(lc_19, dwVisParams, 'Land cover 2019');
-Map.addLayer(lc_20, dwVisParams, 'Land cover 2020');
-Map.addLayer(lc_21, dwVisParams, 'Land cover 2021');
-Map.addLayer(lc_22, dwVisParams, 'Land cover 2022');
+Map.addLayer(lc_16, dwVisParams, 'Land cover 2016', 0);
+Map.addLayer(lc_17, dwVisParams, 'Land cover 2017', 0);
+Map.addLayer(lc_18, dwVisParams, 'Land cover 2018', 0);
+Map.addLayer(lc_19, dwVisParams, 'Land cover 2019', 0);
+Map.addLayer(lc_20, dwVisParams, 'Land cover 2020', 0);
+Map.addLayer(lc_21, dwVisParams, 'Land cover 2021', 0);
+Map.addLayer(lc_22, dwVisParams, 'Land cover 2022', 0);
 
 
-Export.image.toDrive({
-  image: lc_16,
+// Export.image.toDrive({
+//   image: lc_16,
+//   scale: 10,
+//   description: 'LULC_2016',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//   region: roi
+// });
+
+// Export.image.toDrive({
+//   image: lc_17,
+//   scale: 10,
+//   description: 'LULC_2017',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//     region: roi
+// });
+
+// Export.image.toDrive({
+//   image: lc_18,
+//   scale: 10,
+//   description: 'LULC_2018',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//     region: roi
+// });
+
+// Export.image.toDrive({
+//   image: lc_19,
+//   scale: 10,
+//   description: 'LULC_2019',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//     region: roi
+// });
+
+// Export.image.toDrive({
+//   image: lc_20,
+//   scale: 10,
+//   description: 'LULC_2020',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//     region: roi
+// });
+
+// Export.image.toDrive({
+//   image: lc_21,
+//   scale: 10,
+//   description: 'LULC_2021',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//     region: roi
+// });
+
+// Export.image.toDrive({
+//   image: lc_22,
+//   scale: 10,
+//   description: 'LULC_2022',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//     region: roi
+// });
+
+
+
+// Export.image.toDrive({
+//   image: lc_23,
+//   scale: 10,
+//   description: 'LULC_2023',
+//   fileFormat: 'GEOTIFF',
+//   folder: "CB_EXPORT_DW",  
+//   maxPixels: 9e12,
+//     region: roi
+// });
+
+
+// print(lc_16, "Image");
+
+
+/////////////////////////////////////////////////////
+
+var grid = lc_16.reduceToVectors({
+  geometryType: 'polygon',
+  reducer: ee.Reducer.countEvery(),
   scale: 10,
-  description: 'LULC_2016',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-  region: roi
+  maxPixels: 1e13,
+  geometry: roi
 });
 
-Export.image.toDrive({
-  image: lc_17,
-  scale: 10,
-  description: 'LULC_2017',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-    region: roi
-});
-
-Export.image.toDrive({
-  image: lc_18,
-  scale: 10,
-  description: 'LULC_2018',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-    region: roi
-});
-
-Export.image.toDrive({
-  image: lc_19,
-  scale: 10,
-  description: 'LULC_2019',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-    region: roi
-});
-
-Export.image.toDrive({
-  image: lc_20,
-  scale: 10,
-  description: 'LULC_2020',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-    region: roi
-});
-
-Export.image.toDrive({
-  image: lc_21,
-  scale: 10,
-  description: 'LULC_2021',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-    region: roi
-});
-
-Export.image.toDrive({
-  image: lc_22,
-  scale: 10,
-  description: 'LULC_2022',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-    region: roi
+var grid = grid.map(function(feature) {
+  return feature.set('lc_16', feature.get('label')).select(['lc_16']);
 });
 
 
 
-Export.image.toDrive({
-  image: lc_23,
-  scale: 10,
-  description: 'LULC_2023',
-  fileFormat: 'GEOTIFF',
-  folder: "CB_EXPORT_DW",  
-  maxPixels: 9e12,
-    region: roi
+// Create a new FeatureCollection with centroids of each grid cell
+var centroids = grid.map(function(feature) {
+  var centroid = feature.geometry().centroid(1e-3); // Get the centroid geometry
+  return ee.Feature(centroid).copyProperties(feature); // Copy properties from the original feature
+});
+
+// Inspect the result
+// print(centroids.limit(2), "Centroids of each gridcell");
+
+
+
+var centroids = centroids.map(function(feature) {
+  return feature.set(lc_17.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
 });
 
 
+print(centroids.limit(2));
