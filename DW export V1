@@ -26,6 +26,12 @@ var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
  .map(function(image){return image.clip(geometry)})
  .select("label");
  
+var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BGD");
+
+//Refugee camps
+var camps = ee.FeatureCollection("users/salem043/Bangladesh/Cox_Bazar_Simple_Borders");
+Map.addLayer(camps, {}, "Refugee camps", 0);
+
 
 //Winter season composites
 //////////////////////////////////////////////////////////////////////////////////
@@ -281,6 +287,55 @@ var centroids = centroids.map(function(feature) {
 });
 
 
+protect = protect.map(function(feature) {
+  return feature.set('protected', 1); // Add a property with value 1
+});
+
+print(protect);
+
+var protectRaster = protect.reduceToImage({
+    properties: ['protected'], // Use the newly added numeric property
+    reducer: ee.Reducer.first() // Assign the first value it finds to rasterized pixels
+}).unmask(0);
+
+
+var centroids = centroids.map(function(feature) {
+  return feature.set(protectRaster.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
+});
+
+print(centroids.limit(2), "Centroid zonal stats with protected areas");
+
+//Map.addLayer(protectRaster, {min: 0, max: 1, palette: ['white', 'green']}, 'Protected Areas', 0);
+
+
+
+
+
+
+var spatialFilter = ee.Filter.withinDistance({
+  distance: 80000000000,
+  leftField: '.geo',
+  rightField: '.geo',
+  maxError: 10
+});
+
+
+var joined = ee.Join.saveAll({
+  matchesKey: 'neighbors', 
+  measureKey: 'distance',
+  ordering: 'distance'
+}).apply({
+  primary: centroids, 
+  secondary: camps, 
+  condition: spatialFilter
+});
+
+print(joined.limit(2));
 
 //Export
 
