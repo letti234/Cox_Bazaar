@@ -1,0 +1,184 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[91.71146148381821, 22.067618064973296],
+          [91.71146148381821, 20.614582872441776],
+          [92.51346343694321, 20.614582872441776],
+          [92.51346343694321, 22.067618064973296]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+//Call on data
+//////////////////////////////////////////////////////////////////////////////////
+
+//Cox Bazar shapefile
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level2").
+filter(ee.Filter.eq("ADM2_NAME", "Cox's Bazar"));
+
+//LULC classifications subset to ROI
+var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
+ .map(function(image){return image.clip(geometry)})
+ .select("label");
+ 
+
+//Winter season composites
+//////////////////////////////////////////////////////////////////////////////////
+
+
+//Jan 2016-Feb 2016
+var lc_16 = lulc
+  .filterDate("2016-01-01", "2016-02-28")
+  .map(function(image){return image.clip(roi)})
+ .reduce(ee.Reducer.mode());
+
+ 
+//Jan 2017 to Feb 2017
+var lc_17 = lulc
+  .filterDate("2017-01-01", "2017-02-28")
+ .reduce(ee.Reducer.mode());
+ 
+
+//Jan 2018 to Feb 2018
+var lc_18 = lulc
+  .filterDate("2018-01-01", "2018-02-28")
+ .reduce(ee.Reducer.mode());
+ 
+//Jan 2019 to Feb 2019
+var lc_19 = lulc
+  .filterDate("2019-01-01", "2019-02-28")
+ .reduce(ee.Reducer.mode());
+ 
+ 
+//Jan 2019 to Feb 2019
+var lc_19 = lulc
+  .filterDate("2019-01-01", "2019-02-28")
+ .reduce(ee.Reducer.mode());
+
+//Jan 2020 to Feb 2020
+var lc_20 = lulc
+  .filterDate("2020-01-01", "2020-02-28")
+ .reduce(ee.Reducer.mode());
+ 
+//Jan 2021 to Feb 2021
+var lc_21 = lulc
+  .filterDate("2021-01-01", "2021-02-28")
+ .reduce(ee.Reducer.mode());
+ 
+ 
+//Jan 2022 to Feb 2022
+var lc_22 = lulc
+  .filterDate("2022-01-01", "2022-02-28")
+ .reduce(ee.Reducer.mode());
+ 
+ //Jan 2023 to Feb 2023
+var lc_23 = lulc
+  .filterDate("2023-01-01", "2023-02-28")
+ .reduce(ee.Reducer.mode());
+
+
+var dwVisParams = {
+  min: 0, max:8,
+  palette: ['#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635', '#dfc35a', '#c4281b', '#a59b8f', '	#b39fe1']
+};
+
+Map.centerObject(roi);
+
+//Map LULC
+Map.addLayer(lc_16, dwVisParams, 'Land cover 2016');
+Map.addLayer(lc_17, dwVisParams, 'Land cover 2017');
+Map.addLayer(lc_18, dwVisParams, 'Land cover 2018');
+Map.addLayer(lc_19, dwVisParams, 'Land cover 2019');
+Map.addLayer(lc_20, dwVisParams, 'Land cover 2020');
+Map.addLayer(lc_21, dwVisParams, 'Land cover 2021');
+Map.addLayer(lc_22, dwVisParams, 'Land cover 2022');
+
+
+Export.image.toDrive({
+  image: lc_16,
+  scale: 10,
+  description: 'LULC_2016',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+  region: roi
+});
+
+Export.image.toDrive({
+  image: lc_17,
+  scale: 10,
+  description: 'LULC_2017',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+    region: roi
+});
+
+Export.image.toDrive({
+  image: lc_18,
+  scale: 10,
+  description: 'LULC_2018',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+    region: roi
+});
+
+Export.image.toDrive({
+  image: lc_19,
+  scale: 10,
+  description: 'LULC_2019',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+    region: roi
+});
+
+Export.image.toDrive({
+  image: lc_20,
+  scale: 10,
+  description: 'LULC_2020',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+    region: roi
+});
+
+Export.image.toDrive({
+  image: lc_21,
+  scale: 10,
+  description: 'LULC_2021',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+    region: roi
+});
+
+Export.image.toDrive({
+  image: lc_22,
+  scale: 10,
+  description: 'LULC_2022',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+    region: roi
+});
+
+
+
+Export.image.toDrive({
+  image: lc_23,
+  scale: 10,
+  description: 'LULC_2023',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12,
+    region: roi
+});
+
+
