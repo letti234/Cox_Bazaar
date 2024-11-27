@@ -224,5 +224,62 @@ var centroids = centroids.map(function(feature) {
   }));
 });
 
+var centroids = centroids.map(function(feature) {
+  return feature.set(lc_18.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
+});
+
+var centroids = centroids.map(function(feature) {
+  return feature.set(lc_19.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
+});
+
+var centroids = centroids.map(function(feature) {
+  return feature.set(lc_20.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
+});
+
+
+var centroids = centroids.map(function(feature) {
+  return feature.set(lc_21.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
+});
+
+
+var centroids = centroids.map(function(feature) {
+  return feature.set(lc_22.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
+});
+
+var centroids = centroids.map(function(feature) {
+  return feature.set(lc_23.reduceRegion({
+    reducer: 'mean',
+    geometry: feature.geometry(),
+    scale: 10,
+    maxPixels: 1e9
+  }));
+});
+
+
 
 print(centroids.limit(2));
