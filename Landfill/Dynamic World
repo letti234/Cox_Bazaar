@@ -87,7 +87,12 @@ var lc_21 = lulc
  
 //Jan 2022 to Feb 2022
 var lc_22 = lulc
-  .filterDate("2022-01-01", "2022-07-28")
+  .filterDate("2022-01-01", "2022-02-28")
+ .reduce(ee.Reducer.mode());
+ 
+ //Jan 2023 to Feb 2023
+var lc_23 = lulc
+  .filterDate("2023-01-01", "2023-02-28")
  .reduce(ee.Reducer.mode());
 
 
@@ -166,6 +171,17 @@ Export.image.toDrive({
   image: lc_22,
   scale: 10,
   description: 'LULC_2022',
+  fileFormat: 'GEOTIFF',
+  folder: "CB_EXPORT_DW",  
+  maxPixels: 9e12
+});
+
+
+
+Export.image.toDrive({
+  image: lc_23,
+  scale: 10,
+  description: 'LULC_2023',
   fileFormat: 'GEOTIFF',
   folder: "CB_EXPORT_DW",  
   maxPixels: 9e12
