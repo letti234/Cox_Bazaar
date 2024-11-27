@@ -42,54 +42,47 @@ var lc_16 = lulc
 var lc_17 = lulc
   .filterDate("2017-01-01", "2017-02-28")
   .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
-
-var lc_17 = lc_17.select(['label_mode']).rename(['lc_17']);
+ .reduce(ee.Reducer.mode()).select(['label_mode']).rename(['lc_17']);
 
 
 //Jan 2018 to Feb 2018
 var lc_18 = lulc
   .filterDate("2018-01-01", "2018-02-28")
   .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
- 
-//Jan 2019 to Feb 2019
-var lc_19 = lulc
-  .filterDate("2019-01-01", "2019-02-28")
-  .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
- 
- 
-//Jan 2019 to Feb 2019
-var lc_19 = lulc
-  .filterDate("2019-01-01", "2019-02-28")
-  .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
+ .reduce(ee.Reducer.mode()).select(['label_mode']).rename(['lc_18']);
 
+//Jan 2019 to Feb 2019
+var lc_19 = lulc
+  .filterDate("2019-01-01", "2019-02-28")
+  .map(function(image){return image.clip(roi)})
+ .reduce(ee.Reducer.mode()).select(['label_mode']).rename(['lc_19']);
+
+ 
 //Jan 2020 to Feb 2020
 var lc_20 = lulc
   .filterDate("2020-01-01", "2020-02-28")
   .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
+ .reduce(ee.Reducer.mode()).select(['label_mode']).rename(['lc_20']);
+
  
 //Jan 2021 to Feb 2021
 var lc_21 = lulc
   .filterDate("2021-01-01", "2021-02-28")
   .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
- 
- 
+ .reduce(ee.Reducer.mode()).select(['label_mode']).rename(['lc_21']);
+
 //Jan 2022 to Feb 2022
 var lc_22 = lulc
   .filterDate("2022-01-01", "2022-02-28")
   .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
+ .reduce(ee.Reducer.mode()).select(['label_mode']).rename(['lc_22']);
+
  
  //Jan 2023 to Feb 2023
 var lc_23 = lulc
   .filterDate("2023-01-01", "2023-02-28")
   .map(function(image){return image.clip(roi)})
- .reduce(ee.Reducer.mode());
+ .reduce(ee.Reducer.mode()).select(['label_mode']).rename(['lc_23']);
 
 
 var dwVisParams = {
