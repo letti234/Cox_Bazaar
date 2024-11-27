@@ -282,4 +282,7 @@ var centroids = centroids.map(function(feature) {
 
 
 
-print(centroids.limit(2));
+//Export
+
+//Export SSA country as CSV
+Export.table.toDrive(centroids, "DW_Full_Sample_Centroids", "CB_EXPORT_DW");
