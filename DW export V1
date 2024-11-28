@@ -396,5 +396,5 @@ print('Updated FeatureCollection', withNoNeighbors.limit(2));
 //////////////////////////////////////////////////////////////////////////////////
 
 
-
+Map.addLayer(protect);
 Export.table.toDrive(withNoNeighbors, "DW_Full_Sample_Centroids_V2", "CB_EXPORT_DW");
