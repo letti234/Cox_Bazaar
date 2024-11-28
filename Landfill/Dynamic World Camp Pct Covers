@@ -17,9 +17,11 @@ var geometry =
 
 // DESCRIPTION:
 
-//   Code performs following tasks
-  
-    // Calculates percent grasslands for camp areas
+//   Code exports geotiffs of winter composites for each year 2016-2023
+//   Code also vectorizes one geotiff and collects zonal stats about the land cover
+//   classification over time.
+//   Code determines if the sample grid-cell is within or outside of a protected area
+//   Code calculates the minimum distance to the nearest refugee camp
  
 //////////////////////////////////////////////////////////////////////////////////
 //
