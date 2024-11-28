@@ -13,6 +13,16 @@ var geometry =
           [92.51346343694321, 20.614582872441776],
           [92.51346343694321, 22.067618064973296]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+// DESCRIPTION:
+
+//   Code exports geotiffs of winter composites for each year 2016-2023
+//   Code also vectorizes one geotiff and collects zonal stats about the land cover
+//   classification over time.
+//   Code determines if the sample grid-cell is within or outside of a protected area
+//   Code calculates the minimum distance to the nearest refugee camp
+//   Exported data used to execute a matching DID robustness check with alternative
+//   dataframe than bespoke mapping
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //
