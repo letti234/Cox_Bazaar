@@ -83,7 +83,7 @@ var roiGeo = bufferClip.difference(camps, 1);
 //////////////////////////////////////////////////////////////////////////////////
 
 
-var tiles = tile(roiGeo, 0.005); //about 550/550m
+var tiles = tile(roiGeo, 0.001); //about 110/100m
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
