@@ -33,8 +33,8 @@ var geometry =
 
 
 //Cox Bazar shapefile ADD NAIKHONGCHARI
-var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila");
- Map.addLayer(roi);
+var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila/");
+// Map.addLayer(roi);
 
 var roiGeo = roi.union().geometry();
 // Map.addLayer(roiGeo);
@@ -48,18 +48,6 @@ var lulc = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1")
 var camps = ee.FeatureCollection("users/salem043/Bangladesh/Cox_Bazar_Simple_Borders");
 Map.addLayer(camps);
 
-//Buffer around camps
-var buffer = camps.map(function(feature) {
-  return feature.buffer(30000); // 30 km in meters
-});
-var buffer = buffer.union();
-
-var buffer = buffer.geometry();
-var roi = roi.geometry();
-var bufferClip = buffer.intersection(roi);
-
-Map.addLayer(bufferClip);
-
 //Protected areas
 var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BGD");
 // Map.addLayer(protect);
@@ -70,11 +58,9 @@ var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BG
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-var roiGeo = roi.difference(camps, 1);
+var roiGeo = roiGeo.difference(camps, 1);
 
-// Map.addLayer(roiGeo);
-
-
+Map.addLayer(roiGeo);
 
 //////////////////////////////////////////////////////////////////////////////////
 //
