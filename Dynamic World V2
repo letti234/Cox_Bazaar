@@ -1,17 +1,16 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var geometry = 
     /* color: #98ff00 */
-    /* shown: false */
     /* displayProperties: [
       {
         "type": "rectangle"
       }
     ] */
     ee.Geometry.Polygon(
-        [[[91.71146148381821, 22.067618064973296],
-          [91.71146148381821, 20.614582872441776],
-          [92.51346343694321, 20.614582872441776],
-          [92.51346343694321, 22.067618064973296]]], null, false);
+        [[[91.81583160100571, 21.9657666166015],
+          [91.81583160100571, 20.719945802846038],
+          [92.38712066350571, 20.719945802846038],
+          [92.38712066350571, 21.9657666166015]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +32,7 @@ var geometry =
 
 
 //Cox Bazar shapefile ADD NAIKHONGCHARI
-var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila/");
+var roi= ee.FeatureCollection("users/salem043/Bangladesh/CB_with_added_upazila");
 // Map.addLayer(roi);
 
 var roiGeo = roi.union().geometry();
@@ -58,9 +57,9 @@ var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BG
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-var roiGeo = roiGeo.difference(camps, 1);
+var roiGeo2 = roiGeo.difference(camps, 1);
 
-Map.addLayer(roiGeo);
+Map.addLayer(roiGeo2);
 
 //////////////////////////////////////////////////////////////////////////////////
 //
@@ -69,7 +68,7 @@ Map.addLayer(roiGeo);
 //////////////////////////////////////////////////////////////////////////////////
 
 
-var tiles = tile(roiGeo, 0.001); //about 110/100m
+var tiles = tile(geometry, 0.001); //about 110/100m
 
 function tile(region, size_in_degrees) {
   function tile_geometry(geometry) {
@@ -119,7 +118,7 @@ function tile(region, size_in_degrees) {
 }
 
 Map.centerObject(roi, 9);
-Map.addLayer(tiles);
+Map.addLayer(tiles,  {}, "Sample tiles");
 
 
 
