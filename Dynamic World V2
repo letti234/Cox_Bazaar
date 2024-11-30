@@ -70,7 +70,7 @@ var protect = ee.FeatureCollection("users/salem043/Bangladesh/Protected_Areas_BG
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-var roiGeo = bufferClip.difference(camps, 1);
+var roiGeo = roi.difference(camps, 1);
 
 // Map.addLayer(roiGeo);
 
