@@ -1,6 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var geometry = 
     /* color: #98ff00 */
+    /* shown: false */
     /* displayProperties: [
       {
         "type": "rectangle"
@@ -118,7 +119,7 @@ function tile(region, size_in_degrees) {
 }
 
 Map.centerObject(roi, 9);
-Map.addLayer(tiles,  {}, "Sample tiles");
+Map.addLayer(tiles.limit(5),  {col: "red"}, "Sample tiles");
 
 
 
